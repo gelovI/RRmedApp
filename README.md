@@ -28,7 +28,20 @@
 
 ## 📱 Screenshots
 
-*(Hier kannst du später Screenshots deiner App hinzufügen)*
+### MeasurementScreen
+![MeasurementScreen](screenshots/image1.png)
+
+### OverviewScreen
+![OverviewScreen](screenshots/image2.png)
+
+### StatisticScreen
+![StatisticScreen](screenshots/image3.png)
+
+### TherapyScreen
+![TherapyScreen](screenshots/image4.png)
+
+### ReminderScreen
+![ReminderScreen](screenshots/image5.png)
 
 ---
 
