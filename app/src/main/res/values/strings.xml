@@ -6,7 +6,7 @@
     <string name="welcome_with_name">Willkommen %1$s</string>
     <string name="menu">Menü</string>
     <string name="select_user">Benutzer auswählen</string>
-    <string name="delete_active_user">🗑️ Aktiven Nutzer löschen</string>
+    <string name="delete_active_user">Aktiven Nutzer löschen</string>
     <string name="cancel">Abbrechen</string>
     <string name="delete_user_title">Nutzer löschen</string>
     <string name="confirm_user_delete">Möchtest du den Nutzer "%1$s" und alle Messwerte wirklich löschen?</string>
