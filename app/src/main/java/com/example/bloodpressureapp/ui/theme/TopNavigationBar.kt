@@ -68,7 +68,7 @@ fun TopNavigationBar(
                         showMenuDialog = false
                         showAddUserDialog = true
                     }) {
-                        Text("➕ ${stringResource(R.string.create_new_user)}", fontSize = 12.sp)
+                        Text("➕ ${stringResource(R.string.create_new_user)}", fontSize = 11.sp)
                     }
 
                     TextButton(onClick = {
@@ -77,8 +77,8 @@ fun TopNavigationBar(
                     }) {
                         Text(
                             "🗑️ ${stringResource(R.string.delete_active_user)}",
-                            color = MaterialTheme.colors.error,
-                            fontSize = 12.sp
+                            color = Color.Red,
+                            fontSize = 11.sp
                         )
                     }
                 }
