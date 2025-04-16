@@ -49,7 +49,8 @@ class MainActivity : ComponentActivity() {
                 contract = ActivityResultContracts.RequestPermission()
             ) { isGranted ->
                 if (!isGranted) {
-                    Toast.makeText(this, "Benachrichtigungen deaktiviert", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Benachrichtigungen deaktiviert", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
