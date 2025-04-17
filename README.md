@@ -12,6 +12,9 @@
 - 🩸 **Blutdruckmessungen verwalten**  
   Speicherung von systolischem, diastolischem Wert, Puls und Arrhythmie.
 
+  -🩺 **Schnellanalyse**
+  Die Schnellanalyse-Funktion bietet dir eine sofortige Einschätzung deiner gemessenen Werte (systolisch, diastolisch, Puls). Mit einem einfachen Tipp auf das ℹ️-Icon oben rechts in jeder Messkarte öffnet sich ein Dialog, der deine Werte individuell bewertet.
+
 - 📊 **Statistiken & Grafiken**  
   Übersichtliche Darstellung von Messverläufen und Durchschnittswerten.
 
@@ -31,10 +34,11 @@
 <p float="left">
   <img src="screenshots/image1.png" alt="Screenshot 1" width="250"/>
   <img src="screenshots/image2.png" alt="Screenshot 2" width="250"/>
-  <img src="screenshots/image3.png" alt="Screenshot 3" width="250"/>
+  <img src="screenshots/image3.png" alt="Screenshot 6" width="250"/>
 </p>
 
 <p float="left">
+  <img src="screenshots/image3.png" alt="Screenshot 3" width="250"/>
   <img src="screenshots/image4.png" alt="Screenshot 4" width="250"/>
   <img src="screenshots/image5.png" alt="Screenshot 5" width="250"/>
 </p>
