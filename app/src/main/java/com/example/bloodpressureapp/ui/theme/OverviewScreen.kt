@@ -19,7 +19,13 @@ import com.example.bloodpressureapp.data.Measurement
 import com.example.bloodpressureapp.ui.components.EditMeasurementDialog
 import androidx.compose.ui.res.stringResource
 import com.example.bloodpressureapp.R
+import com.example.bloodpressureapp.ui.components.QuickAnalysisDialog
 import com.example.bloodpressureapp.ui.components.SwipeableCard
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+
 
 @Composable
 fun OverviewScreen(viewModel: AppViewModel) {
@@ -73,33 +79,63 @@ fun OverviewScreen(viewModel: AppViewModel) {
                         "HH:mm",
                         Locale.getDefault()
                     ).format(Date(measurement.timestamp))
+                    var showQuickAnalysis by remember { mutableStateOf(false) }
                     SwipeableCard(
                         onEdit = { showEditDialog = measurement },
                         onDelete = { showDeleteDialog = measurement }
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("🕒 $time", fontSize = 12.sp)
-                            Text(
-                                "${stringResource(R.string.overview_systolic)}: ${measurement.systolic}",
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                "${stringResource(R.string.overview_diastolic)}: ${measurement.diastolic}",
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                "${stringResource(R.string.overview_pulse)}: ${measurement.pulse}",
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                "${stringResource(R.string.overview_arrhythmia)}: ${
-                                    if (measurement.arrhythmia) stringResource(
-                                        R.string.overview_yes
-                                    ) else stringResource(R.string.overview_no)
-                                }", fontSize = 12.sp
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                Text("🕒 $time", fontSize = 12.sp)
+                                Text(
+                                    "${stringResource(R.string.overview_systolic)}: ${measurement.systolic}",
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    "${stringResource(R.string.overview_diastolic)}: ${measurement.diastolic}",
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    "${stringResource(R.string.overview_pulse)}: ${measurement.pulse}",
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    "${stringResource(R.string.overview_arrhythmia)}: ${
+                                        if (measurement.arrhythmia) stringResource(R.string.overview_yes)
+                                        else stringResource(R.string.overview_no)
+                                    }", fontSize = 12.sp
+                                )
+                            }
+
+                            IconButton(
+                                onClick = { showQuickAnalysis = true },
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "Schnellanalyse",
+                                    tint = Color.Blue
+                                )
+                            }
+                        }
+
+                        // ✅ Dialog außerhalb der Box (bleibt korrekt sichtbar)
+                        if (showQuickAnalysis) {
+                            QuickAnalysisDialog(
+                                systolic = measurement.systolic,
+                                diastolic = measurement.diastolic,
+                                pulse = measurement.pulse,
+                                onDismiss = { showQuickAnalysis = false }
                             )
                         }
                     }
+
                 }
             }
         }
