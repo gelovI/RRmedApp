@@ -33,7 +33,6 @@
 
 <p float="left">
   <img src="screenshots/image1.png" alt="Screenshot 1" width="250"/>
-  <img src="screenshots/image2.png" alt="Screenshot 2" width="250"/>
   <img src="screenshots/image6.png" alt="Screenshot 3" width="250"/>
 </p>
 
