@@ -12,7 +12,7 @@
 - 🩸 **Blutdruckmessungen verwalten**  
   Speicherung von systolischem, diastolischem Wert, Puls und Arrhythmie.
 
-  -🩺 **Schnellanalyse**
+- 🩺 **Schnellanalyse**
   Die Schnellanalyse-Funktion bietet dir eine sofortige Einschätzung deiner gemessenen Werte (systolisch, diastolisch, Puls). Mit einem einfachen Tipp auf das ℹ️-Icon oben rechts in jeder Messkarte öffnet sich ein Dialog, der deine Werte individuell bewertet.
 
 - 📊 **Statistiken & Grafiken**  
