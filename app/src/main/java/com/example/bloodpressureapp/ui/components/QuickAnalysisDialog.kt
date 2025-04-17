@@ -3,12 +3,9 @@ package com.example.bloodpressureapp.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bloodpressureapp.R
-import androidx.compose.ui.res.stringResource
 
 @Composable
 fun QuickAnalysisDialog(
