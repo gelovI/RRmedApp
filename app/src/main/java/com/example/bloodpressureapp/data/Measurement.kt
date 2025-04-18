@@ -9,7 +9,8 @@ import androidx.room.*
         parentColumns = ["id"],
         childColumns = ["userId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["userId"])]
 )
 data class Measurement(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

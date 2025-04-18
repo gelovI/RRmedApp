@@ -24,8 +24,10 @@ import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
+import com.example.bloodpressureapp.data.MIGRATION_3_4
 
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java,
             "bloodpressure-db"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
 
         val dao = db.dao()

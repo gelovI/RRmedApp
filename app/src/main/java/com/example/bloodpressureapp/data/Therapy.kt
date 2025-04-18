@@ -2,6 +2,7 @@ package com.example.bloodpressureapp.data
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -11,7 +12,8 @@ import androidx.room.PrimaryKey
         parentColumns = ["id"],
         childColumns = ["userId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["userId"])]
 )
 data class Therapy(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
