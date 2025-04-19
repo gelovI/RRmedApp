@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppDao {
-    @Insert suspend fun insertUser(user: User)
+    @Insert suspend fun insertUser(user: User): Long
     @Insert suspend fun insertMeasurement(measurement: Measurement)
 
     @Query("SELECT * FROM measurements WHERE userId = :userId ORDER BY timestamp DESC")
@@ -31,6 +31,19 @@ interface AppDao {
 
     @Delete
     suspend fun deleteTherapy(therapy: Therapy)
+
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsersOnce(): List<User>
+
+    @Query("SELECT * FROM measurements")
+    suspend fun getAllMeasurements(): List<Measurement>
+
+    @Query("SELECT * FROM therapy")
+    suspend fun getAllTherapies(): List<Therapy>
+
+    @Query("SELECT * FROM reminders")
+    suspend fun getAllReminders(): List<Reminder>
+
 
     @Query("SELECT * FROM reminders WHERE userId = :userId")
     fun getRemindersForUser(userId: Int): Flow<List<Reminder>>
