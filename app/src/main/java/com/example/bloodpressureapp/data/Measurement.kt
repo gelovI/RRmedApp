@@ -1,7 +1,9 @@
 package com.example.bloodpressureapp.data
 
 import androidx.room.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(
     tableName = "measurements",
     foreignKeys = [ForeignKey(

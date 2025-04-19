@@ -71,7 +71,7 @@ fun TherapyFormSection(
                 onClick = {
                     if (name.isNotBlank() && dosage.isNotBlank()) {
                         if (editMode == null) {
-                            viewModel.saveTherapy(name, dosage, userId)
+                            viewModel.saveTherapy(userId, name, dosage)
                         } else {
                             viewModel.updateTherapy(editMode.copy(name = name, dosage = dosage))
                             setEditMode(null)

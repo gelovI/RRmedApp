@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.example.bloodpressureapp.data.Reminder
 import com.example.bloodpressureapp.receiver.ReminderReceiver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class AppViewModel(private val dao: AppDao) : ViewModel() {
@@ -47,7 +49,18 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
         }
     }
 
-    fun saveMeasurement(systolic: Int, diastolic: Int, pulse: Int, arrhythmia: Boolean, userId: Int) {
+    suspend fun saveUserAndReturnId(name: String): Int {
+        return dao.insertUser(User(name = name)).toInt()
+    }
+
+    fun saveMeasurement(
+        systolic: Int,
+        diastolic: Int,
+        pulse: Int,
+        arrhythmia: Boolean,
+        userId: Int,
+        timestamp: Long = System.currentTimeMillis()
+    ) {
         viewModelScope.launch {
             dao.insertMeasurement(
                 Measurement(
@@ -55,7 +68,8 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
                     systolic = systolic,
                     diastolic = diastolic,
                     pulse = pulse,
-                    arrhythmia = arrhythmia
+                    arrhythmia = arrhythmia,
+                    timestamp = timestamp
                 )
             )
             loadMeasurements(userId)
@@ -104,7 +118,7 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
         }
     }
 
-    fun saveTherapy(name: String, dosage: String, userId: Int) {
+    fun saveTherapy(userId: Int, name: String, dosage: String) {
         viewModelScope.launch {
             dao.insertTherapy(Therapy(userId = userId, name = name, dosage = dosage))
             loadTherapies(userId)
@@ -124,6 +138,12 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
             loadTherapies(therapy.userId)
         }
     }
+
+    suspend fun getAllUsersOnce(): List<User> = dao.getAllUsersOnce()
+    suspend fun getAllMeasurements(): List<Measurement> = dao.getAllMeasurements()
+    suspend fun getAllTherapies(): List<Therapy> = dao.getAllTherapies()
+    suspend fun getAllReminders(): List<Reminder> = dao.getAllReminders()
+
 
     fun loadReminders(userId: Int) {
         viewModelScope.launch {
@@ -234,5 +254,4 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
             )
         }
     }
-
 }
