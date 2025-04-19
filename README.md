@@ -27,6 +27,15 @@
 - 🧾 **PDF-Export der Messwerte**  
   Exportiere deine Werte als übersichtliches PDF-Dokument.
 
+  ## 🔁 Datenexport & Import
+
+- 📤 **Export**
+  Alle Nutzerdaten (User, Messwerte, Therapien, Erinnerungen) können als `.json` exportiert und geteilt werden
+  
+- 📥 **Import**
+  Backup-Dateien im JSON-Format können importiert werden, inkl. Nutzerzuordnung
+
+
 ---
 
 ## 📱 Screenshots
