@@ -27,12 +27,12 @@ fun SwipeableCard(
     var offsetX by remember { mutableFloatStateOf(0f) }
     val animatedOffsetX: Dp by animateDpAsState(targetValue = offsetX.dp, label = "swipeOffset")
 
-    val swipeThreshold = -100f // swipe von rechts nach links
+    val swipeThreshold = -100f
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 2.dp, vertical = 4.dp)
     ) {
         // 🔙 Hintergrund mit Buttons
         Row(
