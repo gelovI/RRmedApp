@@ -3,6 +3,7 @@ package com.example.bloodpressureapp.ui.theme
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 import com.example.bloodpressureapp.data.Measurement
+import com.example.bloodpressureapp.ui.components.BloodPressureValueCategoryBarChart
 
 @Composable
 fun StatisticsScreen(viewModel: AppViewModel) {
@@ -42,28 +44,65 @@ fun StatisticsScreen(viewModel: AppViewModel) {
         Entry(index.toFloat(), it.pulse.toFloat())
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Card(elevation = 4.dp, modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(stringResource(R.string.averages), style = MaterialTheme.typography.subtitle1)
-                Text("${stringResource(R.string.systolic)}: $avgSystolic mmHg", fontSize = 12.sp)
-                Text("${stringResource(R.string.diastolic)}: $avgDiastolic mmHg", fontSize = 12.sp)
-                Text("${stringResource(R.string.pulse)}: $avgPulse bpm", fontSize = 12.sp)
+        item {
+            Card(elevation = 4.dp, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        stringResource(R.string.averages),
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                    Text(
+                        "${stringResource(R.string.systolic)}: $avgSystolic mmHg",
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        "${stringResource(R.string.diastolic)}: $avgDiastolic mmHg",
+                        fontSize = 12.sp
+                    )
+                    Text("${stringResource(R.string.pulse)}: $avgPulse bpm", fontSize = 12.sp)
+                }
             }
         }
 
-        MultiLineChartCard(
-            title = stringResource(R.string.chart_title),
-            systolicEntries = systolicEntries,
-            diastolicEntries = diastolicEntries,
-            pulseEntries = pulseEntries,
-            measurements = measurements
-        )
+        item {
+            MultiLineChartCard(
+                title = stringResource(R.string.chart_title),
+                systolicEntries = systolicEntries,
+                diastolicEntries = diastolicEntries,
+                pulseEntries = pulseEntries,
+                measurements = measurements
+            )
+        }
+
+        item {
+            Card(
+                elevation = 4.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(280.dp)
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(
+                        text = "Messwerte in Prozent",
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    BloodPressureValueCategoryBarChart(
+                        measurements = measurements,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                }
+            }
+        }
     }
 }
 

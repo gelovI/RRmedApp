@@ -27,6 +27,8 @@
     <string name="pulse">Puls</string>
     <string name="no_measurements_available">Keine Messwerte vorhanden.</string>
     <string name="chart_title">Messverlauf: Systolisch / Diastolisch / Puls</string>
+    <string name="chart_percentage_title">Verlauf der Messungen</string>
+    <string name="chart_percentage_category">Tageskategorien in Prozent</string>
     <string name="overview_title">📋 Messverlauf</string>
     <string name="overview_export_pdf">📄 PDF exportieren</string>
     <string name="overview_systolic">Systolisch</string>

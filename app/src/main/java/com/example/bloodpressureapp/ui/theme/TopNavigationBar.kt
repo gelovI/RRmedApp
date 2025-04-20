@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +53,7 @@ fun TopNavigationBar(
         },
         actions = {
             IconButton(onClick = { showMenuDialog = true }) {
-                Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.menu))
+                Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.menu))
             }
         }
     )
@@ -237,7 +237,7 @@ fun ExportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
             onFinished()
         }
     }) {
-        Text("📤 Daten exportieren")
+        Text("📤 Daten exportieren", fontSize = 11.sp)
     }
 }
 

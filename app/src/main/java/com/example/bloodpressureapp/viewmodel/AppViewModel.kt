@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.example.bloodpressureapp.data.Reminder
 import com.example.bloodpressureapp.receiver.ReminderReceiver
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class AppViewModel(private val dao: AppDao) : ViewModel() {
