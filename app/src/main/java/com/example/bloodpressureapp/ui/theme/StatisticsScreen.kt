@@ -22,7 +22,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 import com.example.bloodpressureapp.data.Measurement
-import com.example.bloodpressureapp.ui.components.BloodPressureValueCategoryBarChart
+import com.example.bloodpressureapp.ui.components.BloodPressureValuePieChart
 
 @Composable
 fun StatisticsScreen(viewModel: AppViewModel) {
@@ -89,12 +89,12 @@ fun StatisticsScreen(viewModel: AppViewModel) {
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = "Messwerte in Prozent",
+                        text = "Messwert-Kategorien (gesamt)",
                         style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    BloodPressureValueCategoryBarChart(
+                    BloodPressureValuePieChart(
                         measurements = measurements,
                         modifier = Modifier
                             .fillMaxWidth()
