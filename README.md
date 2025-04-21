@@ -41,7 +41,7 @@
 ## 📱 Screenshots
 
 <p float="left">
-  <img src="screenshots/Bild1.png" alt="Screenshot 1" width="250"/>
+  <img src="screenshots/bild1.png" alt="Screenshot 1" width="250"/>
   <img src="screenshots/Bild2.png" alt="Screenshot 2" width="250"/>
   <img src="screenshots/Bild3.png" alt="Screenshot 3" width="250"/>
 </p>
