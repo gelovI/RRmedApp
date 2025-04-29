@@ -9,7 +9,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.bloodpressureapp.R
 
 @Composable
 fun TimePickerDialogSpinner(
@@ -24,7 +26,7 @@ fun TimePickerDialogSpinner(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Uhrzeit wählen", style = MaterialTheme.typography.h6) },
+        title = { Text(text = stringResource(R.string.select_time), style = MaterialTheme.typography.h6) },
         text = {
             AndroidView(
                 factory = {
@@ -46,12 +48,12 @@ fun TimePickerDialogSpinner(
                 onTimeSelected(selectedHour, selectedMinute)
                 onDismiss()
             }) {
-                Text("OK")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Abbrechen")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

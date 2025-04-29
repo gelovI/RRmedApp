@@ -5,7 +5,9 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.bloodpressureapp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,7 +22,7 @@ fun PDFDateRangeDialog(
 
     AlertDialog(
         onDismissRequest = onCancel,
-        title = { Text("Zeitraum auswählen") },
+        title = { stringResource(R.string.date_range) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(onClick = {
@@ -28,7 +30,7 @@ fun PDFDateRangeDialog(
                         start = selected
                     }
                 }) {
-                    Text("📅 Startdatum wählen")
+                    Text(stringResource(R.string.start_date))
                 }
 
                 Button(onClick = {
@@ -36,11 +38,11 @@ fun PDFDateRangeDialog(
                         end = selected
                     }
                 }) {
-                    Text("📅 Enddatum wählen")
+                    Text(stringResource(R.string.end_date))
                 }
 
                 if (start != null && end != null) {
-                    Text("🗓️ Von: ${formatDate(start!!)}\n🗓️ Bis: ${formatDate(end!!)}")
+                    Text("${stringResource(R.string.from)} ${formatDate(start!!)}\n🗓 ${stringResource(R.string.to)} ${formatDate(end!!)}")
                 }
             }
         },
@@ -52,12 +54,12 @@ fun PDFDateRangeDialog(
                     }
                 }
             ) {
-                Text("PDF erstellen")
+                Text(stringResource(R.string.PDF_gen))
             }
         },
         dismissButton = {
             TextButton(onClick = onCancel) {
-                Text("Abbrechen")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

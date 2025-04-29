@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
+import com.example.bloodpressureapp.R
 
 @Composable
 fun DateGroupBox(
@@ -33,7 +35,7 @@ fun DateGroupBox(
         ) {
             Icon(
                 imageVector = Icons.Filled.CalendarToday,
-                contentDescription = "Datum",
+                contentDescription = stringResource(R.string.date),
                 tint = MaterialTheme.colors.primary,
                 modifier = Modifier.size(16.dp)
             )

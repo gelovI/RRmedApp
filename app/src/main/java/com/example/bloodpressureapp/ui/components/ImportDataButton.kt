@@ -7,7 +7,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.util.importData
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +30,7 @@ fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
             if (json != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                     importData(context, json, viewModel)
-                    Toast.makeText(context, "✅ Import abgeschlossen", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.import_opt), Toast.LENGTH_SHORT).show()
                     onFinished()
                 }
             }
@@ -38,6 +40,6 @@ fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
     TextButton(onClick = {
         importLauncher.launch("application/json")
     }) {
-        Text("📥 Daten importieren", fontSize = 11.sp)
+        Text(stringResource(R.string.file_import), fontSize = 11.sp)
     }
 }

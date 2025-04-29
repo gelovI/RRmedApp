@@ -6,8 +6,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.util.exportData
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -39,11 +41,11 @@ fun ExportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-            context.startActivity(Intent.createChooser(shareIntent, "📤 Backup teilen"))
+            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_backup)))
 
             onFinished()
         }
     }) {
-        Text("📤 Daten exportieren", fontSize = 11.sp)
+        Text(stringResource(R.string.file_export), fontSize = 11.sp)
     }
 }

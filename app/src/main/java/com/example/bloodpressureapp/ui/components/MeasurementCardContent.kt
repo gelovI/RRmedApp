@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bloodpressureapp.R
 
 @Composable
 fun MeasurementCardContent(
@@ -41,13 +43,13 @@ fun MeasurementCardContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ValueColumn("Sys", systolic.toString())
+                ValueColumn(stringResource(R.string.overview_systolic), systolic.toString())
                 DividerLine()
-                ValueColumn("Dias.", diastolic.toString())
+                ValueColumn(stringResource(R.string.overview_diastolic), diastolic.toString())
                 DividerLine()
-                ValueColumn("Puls", pulse.toString())
+                ValueColumn(stringResource(R.string.overview_pulse), pulse.toString())
                 DividerLine()
-                ValueColumn("Arrh.", if (arrhythmia) "Ja" else "Nein", valueFontSize = 14)
+                ValueColumn(stringResource(R.string.overview_arrhythmia), if (arrhythmia) stringResource(R.string.overview_yes) else stringResource(R.string.overview_no), valueFontSize = 14)
             }
         }
 
@@ -61,7 +63,7 @@ fun MeasurementCardContent(
         ) {
             Icon(
                 imageVector = Icons.Default.Info,
-                contentDescription = "Info",
+                contentDescription = stringResource(R.string.info_btn),
                 tint = Color.White,
                 modifier = Modifier.size(14.dp)
             )

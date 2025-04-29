@@ -15,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.bloodpressureapp.R
 
 @Composable
 fun SwipeableCard(
@@ -44,12 +46,12 @@ fun SwipeableCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onEdit) {
-                Icon(Icons.Default.Edit, contentDescription = "Bearbeiten", tint = Color.DarkGray)
+                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit), tint = Color.DarkGray)
             }
             IconButton(onClick = onDelete) {
                 Icon(
                     Icons.Default.Delete,
-                    contentDescription = "Löschen",
+                    contentDescription = stringResource(R.string.delete),
                     tint = MaterialTheme.colors.error
                 )
             }

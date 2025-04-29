@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.bloodpressureapp.R
+
 
 @Composable
 fun BottomNavigationArrows(
@@ -45,7 +48,7 @@ fun BottomNavigationArrows(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Zurück",
+                    contentDescription = stringResource(R.string.return_btn),
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
@@ -62,7 +65,7 @@ fun BottomNavigationArrows(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = "Weiter",
+                    contentDescription = stringResource(R.string.forward_btn),
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
