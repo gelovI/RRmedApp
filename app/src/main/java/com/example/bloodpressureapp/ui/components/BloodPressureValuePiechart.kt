@@ -4,7 +4,9 @@ import android.graphics.Color as AndroidColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.data.Measurement
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
@@ -32,12 +34,12 @@ fun BloodPressureValuePieChart(
     }
 
     val entries = listOf(
-        PieEntry(normal.toFloat(), "Normal"),
-        PieEntry(elevated.toFloat(), "Leicht erhöht"),
-        PieEntry(high.toFloat(), "Hoch")
+        PieEntry(normal.toFloat(), stringResource(R.string.label_normal)),
+        PieEntry(elevated.toFloat(), stringResource(R.string.label_elevated)),
+        PieEntry(high.toFloat(), stringResource(R.string.label_high))
     ).filter { it.value > 0f }
 
-    val dataSet = PieDataSet(entries, "Messwert-Kategorien").apply {
+    val dataSet = PieDataSet(entries, stringResource(R.string.chart_categories)).apply {
         colors = listOf(AndroidColor.GREEN, AndroidColor.YELLOW, AndroidColor.RED)
         valueTextSize = 12f
         sliceSpace = 2f

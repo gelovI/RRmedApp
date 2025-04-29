@@ -89,6 +89,7 @@ fun OverviewScreen(viewModel: AppViewModel) {
 
                             if (showQuickAnalysis) {
                                 QuickAnalysisDialog(
+                                    context = context,
                                     systolic = measurement.systolic,
                                     diastolic = measurement.diastolic,
                                     pulse = measurement.pulse,
