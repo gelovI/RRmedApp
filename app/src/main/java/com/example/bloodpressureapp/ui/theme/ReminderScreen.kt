@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.data.Reminder
+import com.example.bloodpressureapp.ui.components.ReminderCardContent
 import com.example.bloodpressureapp.ui.components.SwipeableCard
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import com.example.bloodpressureapp.ui.components.TimePickerDialogSpinner
@@ -151,24 +152,14 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                         showDeleteDialog.value = reminder
                     }
                 ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            "⏰ ${
-                                String.format(
-                                    Locale.getDefault(),
-                                    "%02d:%02d",
-                                    reminder.hour,
-                                    reminder.minute
-                                )
-                            }", fontSize = 14.sp
-                        )
-                        Text("📝 ${reminder.message}", fontSize = 12.sp)
-                        Text(
-                            if (reminder.repeatDaily) stringResource(R.string.repeats_daily)
-                            else "📅 Aktiv an: ${reminder.days}",
-                            fontSize = 10.sp
-                        )
-                    }
+                    ReminderCardContent(
+                        time = String.format(Locale.getDefault(), "%02d:%02d", reminder.hour, reminder.minute),
+                        message = reminder.message,
+                        repeatInfo = if (reminder.repeatDaily)
+                            stringResource(R.string.repeats_daily)
+                        else
+                            "📅 Aktiv an: ${reminder.days}"
+                    )
                 }
             }
         }
