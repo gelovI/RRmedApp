@@ -50,6 +50,8 @@
   <img src="screenshots/Bild4.png" alt="Screenshot 4" width="250"/>
   <img src="screenshots/Bild5.png" alt="Screenshot 5" width="250"/>
   <img src="screenshots/Bild6.png" alt="Screenshot 6" width="250"/>
+</p>
+<p>
   <img src="screenshots/Bild7.png" alt="Screenshot 6" width="250"/>
 </p>
 
