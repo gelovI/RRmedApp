@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.ui.components.SwipeableCard
+import com.example.bloodpressureapp.ui.components.TherapyFormSection
 
 @Composable
 fun TherapyScreen(viewModel: AppViewModel, userId: Int) {
