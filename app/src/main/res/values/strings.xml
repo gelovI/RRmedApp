@@ -110,5 +110,7 @@
     <string name="pulse_low">⚠️ Puls ist niedrig (Bradykardie).</string>
     <string name="pulse_normal">✅ Puls im normalen Bereich.</string>
     <string name="pulse_high">⚠️ Puls ist erhöht (Tachykardie).</string>
-
+    <string name="pdf_report_title">Blutdruckreport für: %1$s</string>
+    <string name="pdf_date_range">Zeitraum: %1$s - %2$s</string>
+    <string name="pdf_header">Zeit            | Syst./Diast. | Puls | Arrhythmie</string>
 </resources>
