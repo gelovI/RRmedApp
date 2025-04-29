@@ -112,7 +112,7 @@ fun OverviewScreen(viewModel: AppViewModel) {
                 endDate = end
                 showDateDialog = false
 
-                val pdfFile = generateMeasurementPdf(measurements, start, end, user!!)
+                val pdfFile = generateMeasurementPdf(context, measurements, start, end, user!!)
                 Toast.makeText(
                     context,
                     pdfFile?.let { "${context.getString(R.string.overview_pdf_saved)}: ${it.name}" }
