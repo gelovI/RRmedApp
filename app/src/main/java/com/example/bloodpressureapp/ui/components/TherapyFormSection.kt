@@ -1,4 +1,4 @@
-package com.example.bloodpressureapp.ui.theme
+package com.example.bloodpressureapp.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -27,7 +27,6 @@ fun TherapyFormSection(
 ) {
     var showForm by remember { mutableStateOf(false) }
 
-    // Automatisch aufklappen bei Bearbeiten
     LaunchedEffect(editMode) {
         if (editMode != null) showForm = true
     }
