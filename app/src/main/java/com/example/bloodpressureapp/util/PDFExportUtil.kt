@@ -5,11 +5,13 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import android.widget.Toast
 import com.example.bloodpressureapp.R
 import com.example.bloodpressureapp.data.Measurement
 import com.example.bloodpressureapp.data.User
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,13 +32,16 @@ fun generateMeasurementPdf(
     val doc = PdfDocument()
     val paint = Paint()
     val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4
-    val page = doc.startPage(pageInfo)
-    val canvas = page.canvas
+    var page = doc.startPage(pageInfo)
+    var canvas = page.canvas
+    var y = 40
 
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
     val headerFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    var y = 40
 
+    val safeUserName = user.name
+
+    // Header
     paint.textSize = 18f
     paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     canvas.drawText(context.getString(R.string.pdf_report_title, user.name), 40f, y.toFloat(), paint)
@@ -54,26 +59,42 @@ fun generateMeasurementPdf(
     canvas.drawLine(40f, y.toFloat(), 555f, y.toFloat(), paint)
     y += 15
 
-    filtered.forEach {
-        val line = "${dateFormat.format(Date(it.timestamp))} | ${it.systolic}/${it.diastolic} mmHg | ${it.pulse}  | ${if (it.arrhythmia) "Ja" else "Nein"}"
+    filtered.forEachIndexed { index, it ->
+        val line = "${dateFormat.format(Date(it.timestamp))} | ${it.systolic}/${it.diastolic} mmHg | ${it.pulse} | ${if (it.arrhythmia) "Ja" else "Nein"}"
         canvas.drawText(line, 40f, y.toFloat(), paint)
         y += 20
 
         if (y > 800) {
             doc.finishPage(page)
+            page = doc.startPage(pageInfo)
+            canvas = page.canvas
             y = 40
         }
     }
 
+    // Finish last page
     doc.finishPage(page)
 
-    val file = File(
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-        "Blutdruck_${System.currentTimeMillis()}.pdf"
-    )
+    val safeDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    val currentDate = safeDateFormat.format(Date())
+    val fileName = "Blutdruck_${safeUserName}_$currentDate.pdf"
 
-    doc.writeTo(FileOutputStream(file))
-    doc.close()
+    // Speicherort prüfen
+    val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+    if (!downloadDir.exists()) {
+        downloadDir.mkdirs()
+    }
 
-    return file
+    val file = File(downloadDir, fileName)
+
+    return try {
+        doc.writeTo(FileOutputStream(file))
+        doc.close()
+        Toast.makeText(context, "PDF gespeichert: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        file
+    } catch (e: IOException) {
+        e.printStackTrace()
+        Toast.makeText(context, "Fehler beim Speichern des PDFs", Toast.LENGTH_LONG).show()
+        null
+    }
 }
