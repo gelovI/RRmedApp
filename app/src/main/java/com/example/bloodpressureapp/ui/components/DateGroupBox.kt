@@ -20,7 +20,6 @@ import com.example.bloodpressureapp.R
 @Composable
 fun DateGroupBox(
     date: String,
-    content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -45,7 +44,5 @@ fun DateGroupBox(
                 style = MaterialTheme.typography.subtitle2.copy(fontWeight = FontWeight.Bold)
             )
         }
-
-        content()
     }
 }

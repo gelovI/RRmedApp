@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.R
+import com.example.bloodpressureapp.util.getBpCategory
 
 @Composable
 fun QuickAnalysisDialog(
@@ -49,16 +50,23 @@ private fun analyzeValues(
 ): String {
     val sb = StringBuilder()
 
-    when {
-        systolic < 130 && diastolic < 85 -> sb.append(context.getString(R.string.bp_normal) + "\n")
-        systolic in 130..139 || diastolic in 85..89 -> sb.append(context.getString(R.string.bp_elevated) + "\n")
-        else -> sb.append(context.getString(R.string.bp_high) + "\n")
+    when (getBpCategory(systolic, diastolic)) {
+        0 -> sb.append(context.getString(R.string.bp_optimal) + "\n")
+        1 -> sb.append(context.getString(R.string.bp_normal) + "\n")
+        2 -> sb.append(context.getString(R.string.bp_high_normal) + "\n")
+        3 -> sb.append(context.getString(R.string.bp_hypertension_1) + "\n")
+        4 -> sb.append(context.getString(R.string.bp_hypertension_2) + "\n")
+        5 -> sb.append(context.getString(R.string.bp_hypertension_severe) + "\n")
+        else -> sb.append(context.getString(R.string.bp_unspecified) + "\n")
     }
 
     when {
-        pulse < 60 -> sb.append(context.getString(R.string.pulse_low) + "\n")
-        pulse in 60..100 -> sb.append(context.getString(R.string.pulse_normal) + "\n")
-        else -> sb.append(context.getString(R.string.pulse_high) + "\n")
+        pulse < 60 ->
+            sb.append(context.getString(R.string.pulse_low) + "\n")
+        pulse in 60..100 ->
+            sb.append(context.getString(R.string.pulse_normal) + "\n")
+        else ->
+            sb.append(context.getString(R.string.pulse_high) + "\n")
     }
 
     return sb.toString().trim()

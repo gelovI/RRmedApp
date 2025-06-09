@@ -22,11 +22,15 @@ import com.example.bloodpressureapp.R
 
 @Composable
 fun SwipeableCard(
+    isRevealed: Boolean,
+    onReveal: () -> Unit,
+    onReset: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    var offsetX by remember { mutableFloatStateOf(0f) }
+    val targetOffset = if (isRevealed) -120f else 0f
+    var offsetX by remember { mutableFloatStateOf(targetOffset) }
     val animatedOffsetX: Dp by animateDpAsState(targetValue = offsetX.dp, label = "swipeOffset")
 
     val swipeThreshold = -100f
@@ -36,7 +40,7 @@ fun SwipeableCard(
             .fillMaxWidth()
             .padding(horizontal = 2.dp, vertical = 4.dp)
     ) {
-        // 🔙 Hintergrund mit Buttons
+        // Hintergrund mit Edit / Delete Buttons
         Row(
             modifier = Modifier
                 .matchParentSize()
@@ -46,7 +50,11 @@ fun SwipeableCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onEdit) {
-                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit), tint = Color.DarkGray)
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.edit),
+                    tint = Color.DarkGray
+                )
             }
             IconButton(onClick = onDelete) {
                 Icon(
@@ -57,17 +65,22 @@ fun SwipeableCard(
             }
         }
 
-        // 📦 Vordergrund (Card mit Inhalt)
         Card(
             shape = RoundedCornerShape(8.dp),
             elevation = 6.dp,
             modifier = Modifier
                 .offset(x = animatedOffsetX)
                 .fillMaxWidth()
-                .pointerInput(Unit) {
+                .pointerInput(isRevealed) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
-                            offsetX = if (offsetX < swipeThreshold) -120f else 0f
+                            if (offsetX < swipeThreshold) {
+                                offsetX = -120f
+                                onReveal()
+                            } else {
+                                offsetX = 0f
+                                onReset()
+                            }
                         },
                         onHorizontalDrag = { _, dragAmount ->
                             offsetX = (offsetX + dragAmount).coerceIn(-120f, 0f)
