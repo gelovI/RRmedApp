@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import com.example.bloodpressureapp.R
 import kotlinx.coroutines.launch
@@ -106,7 +107,15 @@ fun MeasurementScreen(viewModel: AppViewModel, userId: Int) {
             hostState = snackbarHostState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(16.dp)
+                .padding(16.dp),
+            snackbar = { _ ->
+                Snackbar {
+                    Text(
+                        text = snackbarMessage,
+                        fontSize = 10.sp
+                    )
+                }
+            }
         )
     }
 }

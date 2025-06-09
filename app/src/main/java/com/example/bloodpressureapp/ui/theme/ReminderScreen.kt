@@ -41,6 +41,8 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
         }
     }
 
+    val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
+
     LaunchedEffect(userId) {
         viewModel.loadReminders(userId)
     }
@@ -137,8 +139,13 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
         Text(stringResource(R.string.your_reminders), style = MaterialTheme.typography.subtitle1)
 
         LazyColumn {
-            items(reminders) { reminder ->
+            items(reminders, key = { it.id }) { reminder ->
+                val isRevealed = revealedStates[reminder.id] ?: false
+
                 SwipeableCard(
+                    isRevealed = isRevealed,
+                    onReveal = { revealedStates[reminder.id] = true },
+                    onReset = { revealedStates[reminder.id] = false },
                     onEdit = {
                         hour = reminder.hour
                         minute = reminder.minute
@@ -150,6 +157,7 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                     },
                     onDelete = {
                         showDeleteDialog.value = reminder
+                        revealedStates.remove(reminder.id) // Zustand zurücksetzen
                     }
                 ) {
                     ReminderCardContent(

@@ -4,6 +4,7 @@ import com.example.bloodpressureapp.util.generateMeasurementPdf
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -31,6 +32,8 @@ fun OverviewScreen(viewModel: AppViewModel) {
     var showDeleteDialog by remember { mutableStateOf<Measurement?>(null) }
 
     val user = viewModel.selectedUser.collectAsState().value
+
+    val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
 
     val grouped = measurements.groupBy {
         SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(it.timestamp))
@@ -63,40 +66,48 @@ fun OverviewScreen(viewModel: AppViewModel) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             grouped.forEach { (date, itemsForDate) ->
+                // 📅 Datum als separates Element
                 item {
-                    DateGroupBox(date = date) {
-                        itemsForDate.forEach { measurement ->
-                            val time = SimpleDateFormat(
-                                "HH:mm",
-                                Locale.getDefault()
-                            ).format(Date(measurement.timestamp))
-                            var showQuickAnalysis by remember { mutableStateOf(false) }
+                    DateGroupBox(date = date)
+                }
 
-                            SwipeableCard(
-                                onEdit = { showEditDialog = measurement },
-                                onDelete = { showDeleteDialog = measurement }
-                            ) {
-                                MeasurementCardContent(
-                                    time = time,
-                                    systolic = measurement.systolic,
-                                    diastolic = measurement.diastolic,
-                                    pulse = measurement.pulse,
-                                    arrhythmia = measurement.arrhythmia,
-                                    onInfoClick = { showQuickAnalysis = true }
-                                )
-                            }
+                // 🔁 Alle Messungen des Datums
+                items(itemsForDate, key = { it.id }) { measurement ->
+                    val time = SimpleDateFormat(
+                        "HH:mm",
+                        Locale.getDefault()
+                    ).format(Date(measurement.timestamp))
+                    var showQuickAnalysis by remember { mutableStateOf(false) }
+                    val isRevealed = revealedStates[measurement.id] ?: false
 
-
-                            if (showQuickAnalysis) {
-                                QuickAnalysisDialog(
-                                    context = context,
-                                    systolic = measurement.systolic,
-                                    diastolic = measurement.diastolic,
-                                    pulse = measurement.pulse,
-                                    onDismiss = { showQuickAnalysis = false }
-                                )
-                            }
+                    SwipeableCard(
+                        isRevealed = isRevealed,
+                        onReveal = { revealedStates[measurement.id] = true },
+                        onReset = { revealedStates[measurement.id] = false },
+                        onEdit = { showEditDialog = measurement },
+                        onDelete = {
+                            showDeleteDialog = measurement
+                            revealedStates.remove(measurement.id)
                         }
+                    ) {
+                        MeasurementCardContent(
+                            time = time,
+                            systolic = measurement.systolic,
+                            diastolic = measurement.diastolic,
+                            pulse = measurement.pulse,
+                            arrhythmia = measurement.arrhythmia,
+                            onInfoClick = { showQuickAnalysis = true }
+                        )
+                    }
+
+                    if (showQuickAnalysis) {
+                        QuickAnalysisDialog(
+                            context = context,
+                            systolic = measurement.systolic,
+                            diastolic = measurement.diastolic,
+                            pulse = measurement.pulse,
+                            onDismiss = { showQuickAnalysis = false }
+                        )
                     }
                 }
             }

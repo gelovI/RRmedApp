@@ -23,6 +23,8 @@ fun TherapyScreen(viewModel: AppViewModel, userId: Int) {
     var editMode by remember { mutableStateOf<Therapy?>(null) }
     var showDeleteDialog by remember { mutableStateOf<Therapy?>(null) }
 
+    val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
+
     LaunchedEffect(userId) {
         viewModel.loadTherapies(userId)
     }
@@ -49,14 +51,22 @@ fun TherapyScreen(viewModel: AppViewModel, userId: Int) {
         Spacer(modifier = Modifier.height(8.dp))
 
         LazyColumn {
-            items(therapies) { therapy ->
+            items(therapies, key = { it.id }) { therapy ->
+                val isRevealed = revealedStates[therapy.id] ?: false
+
                 SwipeableCard(
+                    isRevealed = isRevealed,
+                    onReveal = { revealedStates[therapy.id] = true },
+                    onReset = { revealedStates[therapy.id] = false },
                     onEdit = {
                         editMode = therapy
                         name = therapy.name
                         dosage = therapy.dosage
                     },
-                    onDelete = { showDeleteDialog = therapy }
+                    onDelete = {
+                        showDeleteDialog = therapy
+                        revealedStates.remove(therapy.id)
+                    }
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
                         Text("💊 ${therapy.name}", fontSize = 11.sp)
