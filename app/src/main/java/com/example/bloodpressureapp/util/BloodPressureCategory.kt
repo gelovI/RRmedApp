@@ -1,5 +1,8 @@
 package com.example.bloodpressureapp.util
 
+import android.content.Context
+import com.example.bloodpressureapp.R
+
 fun getBpCategory(systolic: Int, diastolic: Int): Int {
     val systolicLevel = when {
         systolic >= 180 -> 5
@@ -20,4 +23,16 @@ fun getBpCategory(systolic: Int, diastolic: Int): Int {
     }
 
     return maxOf(systolicLevel, diastolicLevel)
+}
+
+fun getBpCategoryLabel(context: Context, category: Int): String {
+    return when (category) {
+        0 -> context.getString(R.string.bp_optimal)
+        1 -> context.getString(R.string.bp_normal)
+        2 -> context.getString(R.string.bp_high_normal)
+        3 -> context.getString(R.string.bp_hypertension_1)
+        4 -> context.getString(R.string.bp_hypertension_2)
+        5 -> context.getString(R.string.bp_hypertension_severe)
+        else -> context.getString(R.string.bp_unspecified)
+    }
 }

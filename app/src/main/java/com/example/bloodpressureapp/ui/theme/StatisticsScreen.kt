@@ -13,7 +13,6 @@ import com.example.bloodpressureapp.viewmodel.AppViewModel
 import com.github.mikephil.charting.data.Entry
 import com.example.bloodpressureapp.ui.components.BloodPressureValuePieChart
 import com.example.bloodpressureapp.ui.components.charts.MultiLineChartCard
-import com.example.bloodpressureapp.util.getBpCategory
 
 @Composable
 fun StatisticsScreen(viewModel: AppViewModel) {
@@ -35,15 +34,11 @@ fun StatisticsScreen(viewModel: AppViewModel) {
         Entry(index.toFloat(), it.pulse.toFloat())
     }
 
-    val categoryCounts = measurements
-        .map { getBpCategory(it.systolic, it.diastolic) }
-        .groupingBy { it }
-        .eachCount()
-
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxWidth()
+            .padding(16.dp)
+            .heightIn(min = 500.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
@@ -53,8 +48,14 @@ fun StatisticsScreen(viewModel: AppViewModel) {
                         stringResource(R.string.averages),
                         style = MaterialTheme.typography.subtitle1
                     )
-                    Text("${stringResource(R.string.systolic)}: $avgSystolic mmHg", fontSize = 12.sp)
-                    Text("${stringResource(R.string.diastolic)}: $avgDiastolic mmHg", fontSize = 12.sp)
+                    Text(
+                        "${stringResource(R.string.systolic)}: $avgSystolic mmHg",
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        "${stringResource(R.string.diastolic)}: $avgDiastolic mmHg",
+                        fontSize = 12.sp
+                    )
                     Text("${stringResource(R.string.pulse)}: $avgPulse bpm", fontSize = 12.sp)
                 }
             }
@@ -75,28 +76,20 @@ fun StatisticsScreen(viewModel: AppViewModel) {
                 elevation = 4.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .fillMaxHeight()
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
                         text = stringResource(R.string.bp_distribution_chart),
                         style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        fontSize = 12.sp
                     )
 
                     BloodPressureValuePieChart(
                         measurements = measurements,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "Optimal: ${categoryCounts[0] ?: 0} • Normal: ${categoryCounts[1] ?: 0} • Hochnormal: ${categoryCounts[2] ?: 0} • Grad 1+: ${categoryCounts.filterKeys { it >= 3 }.values.sum()}",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
             }
