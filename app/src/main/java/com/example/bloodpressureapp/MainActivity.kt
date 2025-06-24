@@ -97,7 +97,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                 ) {
-                    // 🔝 Top Navigation Bar mit Benutzername
                     TopNavigationBar(
                         username = username,
                         viewModel = viewModel,
@@ -109,8 +108,6 @@ class MainActivity : ComponentActivity() {
                         onTabSelected = { screenIndex = it }
                     )
 
-
-                    // 📦 Hauptinhalt der aktuellen View
                     Box(modifier = Modifier.weight(1f)) {
                         when (screenIndex) {
                             0 -> selectedUser?.let {

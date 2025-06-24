@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.ShowChart
 
 @Composable
 fun TopTabNavigation(
@@ -22,8 +22,8 @@ fun TopTabNavigation(
 ) {
     val tabs = listOf(
         Icons.Default.Favorite,
-        Icons.AutoMirrored.Filled.List,
-        Icons.AutoMirrored.Filled.ShowChart,
+        Icons.Filled.List,
+        Icons.Filled.ShowChart,
         Icons.Default.MedicalServices,
         Icons.Default.Alarm
     )

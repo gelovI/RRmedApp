@@ -34,7 +34,15 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
     var editMode by remember { mutableStateOf<Reminder?>(null) }
     val showDeleteDialog = remember { mutableStateOf<Reminder?>(null) }
 
-    val daysOfWeek = listOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+    val daysOfWeek = listOf(
+        stringResource(R.string.monday_short),
+        stringResource(R.string.tuesday_short),
+        stringResource(R.string.wednesday_short),
+        stringResource(R.string.thursday_short),
+        stringResource(R.string.friday_short),
+        stringResource(R.string.saturday_short),
+        stringResource(R.string.sunday_short)
+    )
     val selectedDays = remember {
         mutableStateMapOf<String, Boolean>().apply {
             daysOfWeek.forEach { this[it] = false }
@@ -76,7 +84,9 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
         if (!repeatDaily) {
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 daysOfWeek.forEach { day ->

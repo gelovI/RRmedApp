@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,11 +32,16 @@ fun TopNavigationBar(
     val users by viewModel.users.collectAsState()
     val selectedUser by viewModel.selectedUser.collectAsState()
 
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+
+    val fontSize = if (screenWidthDp >= 600) 20.sp else 12.sp
+
     TopAppBar(
         title = {
             Text(
                 text = stringResource(R.string.welcome_user, username),
-                style = MaterialTheme.typography.caption,
+                fontSize = fontSize,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -51,7 +57,7 @@ fun TopNavigationBar(
     if (showMenuDialog) {
         AlertDialog(
             onDismissRequest = { showMenuDialog = false },
-            title = { Text(stringResource(R.string.user_options)) },
+            title = { Text(stringResource(R.string.user_options), fontSize = fontSize) },
             text = {
                 Column {
                     users.forEach { user ->
@@ -60,7 +66,7 @@ fun TopNavigationBar(
                             preferenceManager.setLastSelectedUserId(user.id)
                             showMenuDialog = false
                         }) {
-                            Text(user.name)
+                            Text(user.name, fontSize = fontSize)
                         }
                     }
 
@@ -70,7 +76,7 @@ fun TopNavigationBar(
                         showMenuDialog = false
                         showAddUserDialog = true
                     }) {
-                        Text("➕ ${stringResource(R.string.create_new_user)}", fontSize = 11.sp)
+                        Text("➕ ${stringResource(R.string.create_new_user)}", fontSize = fontSize)
                     }
 
                     TextButton(onClick = {
@@ -80,7 +86,7 @@ fun TopNavigationBar(
                         Text(
                             "🗑️ ${stringResource(R.string.delete_active_user)}",
                             color = Color.Red,
-                            fontSize = 11.sp
+                            fontSize = fontSize
                         )
                     }
 

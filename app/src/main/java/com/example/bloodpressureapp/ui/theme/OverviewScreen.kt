@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,20 +44,25 @@ fun OverviewScreen(viewModel: AppViewModel) {
     var startDate by remember { mutableStateOf<Date?>(null) }
     var endDate by remember { mutableStateOf<Date?>(null) }
 
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+
+    val fontSize = if (screenWidthDp >= 720) 20.sp else 12.sp
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
 
-        Text(stringResource(R.string.overview_title), style = MaterialTheme.typography.h6)
+        Text(stringResource(R.string.overview_title), fontSize = fontSize)
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = { showDateDialog = true },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.overview_export_pdf), fontSize = 12.sp)
+            Text(stringResource(R.string.overview_export_pdf), fontSize = fontSize)
         }
 
         Spacer(modifier = Modifier.height(16.dp))

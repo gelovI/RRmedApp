@@ -7,8 +7,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +47,7 @@ fun BottomNavigationArrows(
                     .background(backgroundColor)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.return_btn),
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
@@ -64,7 +64,7 @@ fun BottomNavigationArrows(
                     .background(backgroundColor)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    imageVector = Icons.Filled.ArrowForward,
                     contentDescription = stringResource(R.string.forward_btn),
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
