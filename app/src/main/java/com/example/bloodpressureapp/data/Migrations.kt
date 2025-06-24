@@ -22,6 +22,7 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS reminders (
+            
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 userId INTEGER NOT NULL,
                 hour INTEGER NOT NULL,

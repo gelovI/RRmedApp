@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,7 @@ fun MeasurementCardContent(
     Box(modifier = Modifier.padding(16.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Zeit: $time",
+                text = stringResource(R.string.reminder_time, time),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -49,7 +50,10 @@ fun MeasurementCardContent(
                 DividerLine()
                 ValueColumn(stringResource(R.string.overview_pulse), pulse.toString())
                 DividerLine()
-                ValueColumn(stringResource(R.string.overview_arrhythmia), if (arrhythmia) stringResource(R.string.overview_yes) else stringResource(R.string.overview_no), valueFontSize = 14)
+                ValueColumn(
+                    stringResource(R.string.overview_arrhythmia),
+                    if (arrhythmia) stringResource(R.string.overview_yes) else stringResource(R.string.overview_no)
+                )
             }
         }
 

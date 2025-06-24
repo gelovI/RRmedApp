@@ -25,7 +25,7 @@
     <string name="systolic">Systolisch</string>
     <string name="diastolic">Diastolisch</string>
     <string name="pulse">Puls</string>
-    <string name="no_measurements_available">Keine Messwerte vorhanden.</string>
+    <string name="no_measurements_available">Keine Messwerte vorhanden</string>
     <string name="chart_title">Messverlauf: Systolisch / Diastolisch / Puls</string>
     <string name="chart_percentage_title">Verlauf der Messungen</string>
     <string name="chart_percentage_category">Tageskategorien in Prozent</string>
@@ -118,4 +118,15 @@
     <string name="pdf_report_title">Blutdruckreport für: %1$s</string>
     <string name="pdf_date_range">Zeitraum: %1$s - %2$s</string>
     <string name="pdf_header">Zeit            | Syst./Diast. | Puls | Arrhythmie</string>
+    <string name="monday_short">Mo</string>
+    <string name="tuesday_short">Di</string>
+    <string name="wednesday_short">Mi</string>
+    <string name="thursday_short">Do</string>
+    <string name="friday_short">Fr</string>
+    <string name="saturday_short">Sa</string>
+    <string name="sunday_short">So</string>
+    <string name="reminder_active_days">📅 Aktiv an: %1$s</string>
+    <string name="delete_reminder_title">Erinnerung löschen</string>
+    <string name="delete_reminder_confirm">Möchtest du diese Erinnerung wirklich löschen?</string>
+    <string name="reminder_time">Zeit: %1$s</string>
 </resources>

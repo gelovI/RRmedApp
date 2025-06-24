@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -17,11 +18,18 @@ import androidx.compose.ui.unit.sp
 fun ValueColumn(
     label: String,
     value: String,
-    valueFontSize: Int = 20,
-    valueHeight: Dp = 28.dp
+    valueHeight: Dp = 38.dp
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    val valueFontSize = if (screenWidthDp >= 720) 32 else 20
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = label, style = MaterialTheme.typography.caption)
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+        )
 
         Box(
             modifier = Modifier

@@ -35,7 +35,6 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
             val newUser = User(name = name)
             dao.insertUser(newUser)
 
-            // Benutzerliste neu laden und letzten setzen
             dao.getAllUsers().collect { list ->
                 if (list.isNotEmpty()) {
                     val lastUser = list.last()
