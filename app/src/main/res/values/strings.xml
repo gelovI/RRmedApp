@@ -129,4 +129,19 @@
     <string name="delete_reminder_title">Erinnerung löschen</string>
     <string name="delete_reminder_confirm">Möchtest du diese Erinnerung wirklich löschen?</string>
     <string name="reminder_time">Zeit: %1$s</string>
+    <string name="select_all">Alle auswählen</string>
+    <string name="delete_selected">Ausgewählte löschen</string>
+    <string name="delete_selected_confirm_title">Einträge löschen?</string>
+    <string name="delete_selected_confirm_msg">Möchtest du %1$d ausgewählte Messungen löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="select_users_export">Nutzer für Export auswählen</string>
+    <string name="select_users_import">Nutzer für Import auswählen</string>
+    <string name="no_users_in_backup">Keine Nutzer im Backup gefunden</string>
+    <string name="measurements">Messungen</string>
+    <string name="overview_no_user">Kein Nutzer ausgewählt.</string>
+    <string name="analysis_disclaimer_title">Wichtiger Hinweis</string>
+    <string name="analysis_disclaimer_text">
+    Diese Auswertung basiert auf europäischen Referenzwerten für Blutdruckmessungen und stellt keine ärztliche Diagnose dar.
+    Sie dient ausschließlich als Orientierung, um ein besseres Verständnis der eigenen Messwerte zu ermöglichen.
+    </string>
+
 </resources>

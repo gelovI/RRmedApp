@@ -95,6 +95,10 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
         }
     }
 
+    fun deleteMeasurementById(id: Int) {
+        val item = measurements.value.firstOrNull { it.id == id } ?: return
+        deleteMeasurement(item)
+    }
 
     fun deleteUser(user: User) {
         viewModelScope.launch {

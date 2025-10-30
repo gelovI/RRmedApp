@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.R
@@ -21,22 +22,57 @@ fun QuickAnalysisDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.quick_analyse)) },
+        title = {
+            Text(
+                text = stringResource(R.string.quick_analyse),
+                style = MaterialTheme.typography.h6
+            )
+        },
         text = {
-            Column {
-                Text("${stringResource(R.string.analise_sys)} $systolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
-                Text("${stringResource(R.string.analise_dias)} $diastolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
-                Text("${stringResource(R.string.analise_puls)} $pulse ${stringResource(R.string.bpm)}", fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Werteabschnitt
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("• ${stringResource(R.string.analise_sys)} $systolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
+                    Text("• ${stringResource(R.string.analise_dias)} $diastolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
+                    Text("• ${stringResource(R.string.analise_puls)} $pulse ${stringResource(R.string.bpm)}", fontSize = 14.sp)
+                }
+
                 Divider()
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(stringResource(R.string.rating), fontSize = 14.sp)
-                Text(analyzeValues(context, systolic, diastolic, pulse), fontSize = 13.sp)
+
+                // Bewertung
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = stringResource(R.string.rating),
+                        fontSize = 15.sp,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                    Text(
+                        text = analyzeValues(context, systolic, diastolic, pulse),
+                        fontSize = 14.sp,
+                        lineHeight = 18.sp
+                    )
+                }
+
+                // Hinweisbox
+                Spacer(Modifier.height(8.dp))
+                DisclaimerBox(
+                    title = stringResource(R.string.analysis_disclaimer_title),
+                    text  = stringResource(R.string.analysis_disclaimer_text)
+                )
             }
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.close))
+                Text(
+                    stringResource(R.string.close),
+                    color = MaterialTheme.colors.primary,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     )

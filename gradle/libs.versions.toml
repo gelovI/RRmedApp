@@ -1,87 +1,44 @@
 [versions]
-activityComposeVersion = "1.10.1"
-agp = "8.6.1"
-androidxActivityCompose = "1.10.1"
-androidxLifecycleRuntimeKtx = "2.9.1"
-androidxRoomRuntime = "2.7.1"
-foundation = "1.8.2"
-googleMaterial = "1.12.0"
-kotlin = "2.0.0"
-coreKtx = "1.16.0"
+androidxActivityComposeVersion = "1.9.2"
+androidxJunit = "1.3.0"
+androidxLifecycleRuntimeKtxVersion = "2.8.3"
+androidxRoomCompiler = "2.8.3"
+androidxRoomKtx = "2.8.3"
+androidxRoomRuntimeVersion = "2.8.3"
+espressoCoreVersion = "3.7.0"
+googleMaterialVersion = "1.13.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-kotlinxCoroutinesAndroid = "1.7.3"
-kotlinxCoroutinesCore = "1.7.3"
-kotlinxSerializationJson = "1.7.3"
-lifecycleRuntimeKtx = "2.9.1"
-activityCompose = "1.10.1"
-composeBom = "2025.06.00"
-lifecycleRuntimeKtxVersion = "2.9.1"
-lifecycleViewmodelCompose = "2.9.1"
-material = "1.8.2"
-materialIconsExtended = "1.7.8"
-materialVersion = "1.8.2"
+kotlinxCoroutinesAndroidVersion = "1.9.0"
+kotlinxCoroutinesCoreVersion = "1.9.0"
+kotlinxCoroutinesTest = "1.9.0"
+kotlinxSerializationJsonVersion = "1.8.1"
+lifecycleViewmodelComposeVersion = "2.9.4"
+mockk = "1.13.10"
 mpandroidchart = "v3.1.0"
-roomCompiler = "2.7.1"
-roomCompilerVersion = "2.7.1"
-roomKtx = "2.7.1"
-roomKtxVersion = "2.7.1"
-roomRuntime = "2.7.1"
-roomRuntimeVersion = "2.7.1"
-ui = "1.8.2"
-uiVersion = "1.8.2"
-uiTestJunit4Android = "1.8.3"
+uiUtilAndroid = "1.9.4"
 
 [libraries]
-androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
-androidx-activity-compose-v180 = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
-androidx-compose-ui-ui = { module = "androidx.compose.ui:ui" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-foundation-pager = { module = "androidx.compose.foundation:foundation-pager" }
-androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
-androidx-lifecycle-runtime-ktx-v261 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
-androidx-lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycleRuntimeKtx" }
-androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-viewmodel-compose-v262 = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
-androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
-androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
-androidx-material-v150 = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
-androidx-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
-androidx-room-compiler-v271 = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
-androidx-room-ktx-v261 = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
-androidx-room-ktx-v271 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-androidx-room-runtime-v250 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
-androidx-room-runtime-v271 = { module = "androidx.room:room-runtime", version.ref = "androidxRoomRuntime" }
-androidx-ui-v150 = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
-google-material = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+activity-compose-v180 = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityComposeVersion" }
+androidx-compose-material-material = { module = "androidx.compose.material:material" }
+androidx-compose-ui-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-ui2 = { module = "androidx.compose.ui:ui" }
+androidx-espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+androidx-junit-v115 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
+androidx-room-compiler-v261 = { module = "androidx.room:room-compiler", version.ref = "androidxRoomCompiler" }
+androidx-room-runtime-v261 = { module = "androidx.room:room-runtime", version.ref = "androidxRoomRuntimeVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-material = { module = "androidx.compose.material:material" }
+kotlinx-coroutines-android-v190 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroidVersion" }
+kotlinx-coroutines-core-v190 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCoreVersion" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+kotlinx-serialization-json-v162 = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
+lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycleRuntimeKtxVersion" }
+lifecycle-viewmodel-compose-v262 = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelComposeVersion" }
+material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+material-v1110 = { module = "com.google.android.material:material", version.ref = "googleMaterialVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+room-ktx-v261 = { module = "androidx.room:room-ktx", version.ref = "androidxRoomKtx" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-ui-util-android = { group = "androidx.compose.ui", name = "ui-util-android", version.ref = "uiUtilAndroid" }

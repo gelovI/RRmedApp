@@ -2,11 +2,15 @@ package com.example.bloodpressureapp.ui.theme
 
 import com.example.bloodpressureapp.util.generateMeasurementPdf
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PictureAsPdf
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -36,8 +40,10 @@ fun OverviewScreen(viewModel: AppViewModel) {
 
     val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
 
-    val grouped = measurements.groupBy {
-        SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(it.timestamp))
+    val grouped = remember(measurements) {
+        measurements.groupBy {
+            SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(it.timestamp))
+        }
     }
 
     var showDateDialog by remember { mutableStateOf(false) }
@@ -46,8 +52,49 @@ fun OverviewScreen(viewModel: AppViewModel) {
 
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
+    val narrow = screenWidthDp < 420
+    val fontSize = if (screenWidthDp >= 720) 20.sp else 15.sp
 
-    val fontSize = if (screenWidthDp >= 720) 20.sp else 12.sp
+    // ---- Mehrfachauswahl-Status ----
+    val selectedIds = remember { mutableStateMapOf<Int, Boolean>() }
+    var selectAll by remember { mutableStateOf(false) }
+    var showConfirmBulkDelete by remember { mutableStateOf(false) }
+
+    // Liste verändert? Auswahl bereinigen + ggf. auffüllen
+    LaunchedEffect(measurements) {
+        // nur noch IDs behalten, die es noch gibt
+        val valid = measurements.map { it.id }.toSet()
+        selectedIds.keys.retainAll(valid)
+
+        // wenn "Select All" aktiv ist, (re)alle markieren
+        if (selectAll) {
+            selectedIds.clear()
+            measurements.forEach { selectedIds[it.id] = true }
+        }
+    }
+
+    // Header-Handler: explizites (De)Selektieren steuern
+    val onHeaderSelectAll: (Boolean) -> Unit = { checked ->
+        selectAll = checked
+        if (checked) {
+            selectedIds.clear()
+            measurements.forEach { selectedIds[it.id] = true }
+        } else {
+            // bewusst ALLES leeren (Header abgewählt = keine Auswahl)
+            selectedIds.clear()
+        }
+    }
+
+    // Einzel-Toggle: Header-Checkbox automatisch aktualisieren
+    fun toggleSelect(id: Int, checked: Boolean) {
+        if (checked) selectedIds[id] = true else selectedIds.remove(id)
+        selectAll = measurements.isNotEmpty() && selectedIds.size == measurements.size
+    }
+
+    val selectionMode by remember { derivedStateOf { selectAll || selectedIds.isNotEmpty() } }
+
+
+    fun isSelected(id: Int) = selectedIds.containsKey(id)
 
     Column(
         modifier = Modifier
@@ -55,29 +102,105 @@ fun OverviewScreen(viewModel: AppViewModel) {
             .padding(16.dp)
     ) {
 
-        Text(stringResource(R.string.overview_title), fontSize = fontSize)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { showDateDialog = true },
-            modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            Text(stringResource(R.string.overview_export_pdf), fontSize = fontSize)
+            Text(
+                text = stringResource(R.string.overview_title),
+                fontSize = fontSize,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = { showDateDialog = true },
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.PictureAsPdf,
+                    contentDescription = stringResource(R.string.overview_export_pdf)
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
+        Divider()
+
+        if (narrow) {
+            Column(Modifier.fillMaxWidth().padding(vertical = 10.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = selectAll, onCheckedChange = onHeaderSelectAll)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.select_all))
+                    if (selectedIds.isNotEmpty()) {
+                        Spacer(Modifier.width(12.dp)); Text("• ${selectedIds.size}")
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+
+                if (selectionMode) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Button(
+                            onClick = { showConfirmBulkDelete = true },
+                            enabled = selectedIds.isNotEmpty(),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = if (selectedIds.isNotEmpty())
+                                    MaterialTheme.colors.error
+                                else
+                                    MaterialTheme.colors.onSurface.copy(alpha = 0.08f),
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) { Text(stringResource(R.string.delete_selected)) }
+                    }
+                }
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = selectAll, onCheckedChange = onHeaderSelectAll)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.select_all))
+                    if (selectedIds.isNotEmpty()) {
+                        Spacer(Modifier.width(12.dp)); Text("• ${selectedIds.size}")
+                    }
+                }
+
+                if (selectionMode) {
+                    AnimatedVisibility(visible = selectionMode) {
+                        Button(
+                            onClick = { showConfirmBulkDelete = true },
+                            enabled = selectedIds.isNotEmpty(),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = if (selectedIds.isNotEmpty())
+                                    MaterialTheme.colors.error
+                                else
+                                    MaterialTheme.colors.onSurface.copy(alpha = 0.08f),
+                                contentColor = MaterialTheme.colors.onPrimary
+                            )
+                        ) { Text(stringResource(R.string.delete_selected)) }
+                    }
+                }
+            }
+        }
+        Divider()
+        Spacer(Modifier.height(8.dp))
 
         LazyColumn(
             contentPadding = PaddingValues(bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             grouped.forEach { (date, itemsForDate) ->
-                // 📅 Datum als separates Element
+                // 📅 Datum als eigenes Element
                 item {
                     DateGroupBox(date = date)
                 }
 
-                // 🔁 Alle Messungen des Datums
+                // Alle Messungen des Datums
                 items(itemsForDate, key = { it.id }) { measurement ->
                     val time = SimpleDateFormat(
                         "HH:mm",
@@ -86,24 +209,34 @@ fun OverviewScreen(viewModel: AppViewModel) {
                     var showQuickAnalysis by remember { mutableStateOf(false) }
                     val isRevealed = revealedStates[measurement.id] ?: false
 
-                    SwipeableCard(
-                        isRevealed = isRevealed,
-                        onReveal = { revealedStates[measurement.id] = true },
-                        onReset = { revealedStates[measurement.id] = false },
-                        onEdit = { showEditDialog = measurement },
-                        onDelete = {
-                            showDeleteDialog = measurement
-                            revealedStates.remove(measurement.id)
-                        }
-                    ) {
+                    val content: @Composable () -> Unit = {
                         MeasurementCardContent(
                             time = time,
                             systolic = measurement.systolic,
                             diastolic = measurement.diastolic,
                             pulse = measurement.pulse,
                             arrhythmia = measurement.arrhythmia,
-                            onInfoClick = { showQuickAnalysis = true }
+                            onInfoClick = { showQuickAnalysis = true },
+                            showCheckbox = selectionMode,
+                            checked = isSelected(measurement.id),
+                            onCheckedChange = {checked -> toggleSelect(measurement.id, checked)}
                         )
+                    }
+
+                    if (selectionMode) {
+                        // Im Selektionsmodus kein Swipe, nur Card anzeigen
+                        Card { content() }
+                    } else {
+                        SwipeableCard(
+                            isRevealed = isRevealed,
+                            onReveal = { revealedStates[measurement.id] = true },
+                            onReset = { revealedStates[measurement.id] = false },
+                            onEdit = { showEditDialog = measurement },
+                            onDelete = {
+                                showDeleteDialog = measurement
+                                revealedStates.remove(measurement.id)
+                            }
+                        ) { content() }
                     }
 
                     if (showQuickAnalysis) {
@@ -129,7 +262,13 @@ fun OverviewScreen(viewModel: AppViewModel) {
                 endDate = end
                 showDateDialog = false
 
-                val pdfFile = generateMeasurementPdf(context, measurements, start, end, user!!)
+                val u = user
+                if (u == null) {
+                    Toast.makeText(context, R.string.overview_no_user, Toast.LENGTH_LONG).show()
+                    return@PDFDateRangeDialog
+                }
+
+                val pdfFile = generateMeasurementPdf(context, measurements, start, end, u)
                 Toast.makeText(
                     context,
                     pdfFile?.let { "${context.getString(R.string.overview_pdf_saved)}: ${it.name}" }
@@ -170,6 +309,36 @@ fun OverviewScreen(viewModel: AppViewModel) {
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = null }) {
                     Text(stringResource(R.string.overview_cancel))
+                }
+            }
+        )
+    }
+
+    // Sammel-Löschdialog
+    if (showConfirmBulkDelete) {
+        val count = selectedIds.size
+        AlertDialog(
+            onDismissRequest = { showConfirmBulkDelete = false },
+            title = { Text(stringResource(R.string.delete_selected_confirm_title)) },
+            text  = { Text(stringResource(R.string.delete_selected_confirm_msg, count)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    val ids = selectedIds.keys.toList()
+                    // Falls du keine Batch-Methode hast, einzeln löschen:
+                    ids.forEach { id -> viewModel.deleteMeasurementById(id) }
+                    // Oder, wenn vorhanden:
+                    // viewModel.deleteMeasurements(ids)
+
+                    showConfirmBulkDelete = false
+                    selectedIds.clear()
+                    selectAll = false
+                }) {
+                    Text(stringResource(R.string.delete), color = MaterialTheme.colors.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showConfirmBulkDelete = false }) {
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
