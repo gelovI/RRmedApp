@@ -18,12 +18,12 @@ fun DisclaimerBox(
     modifier: Modifier = Modifier
 ) {
     val error = MaterialTheme.colors.error
-    val bg    = error.copy(alpha = 0.08f)   // sanftes Rot
+    val bg    = error.copy(alpha = 0.08f)
     val stroke = error.copy(alpha = 0.30f)
 
     Surface(
         color = bg,
-        shape = MaterialTheme.shapes.medium,  // abgerundete Ecken
+        shape = MaterialTheme.shapes.medium,
         border = BorderStroke(1.dp, stroke),
         modifier = modifier
             .fillMaxWidth()
@@ -42,12 +42,12 @@ fun DisclaimerBox(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 12.sp,
                     color = error
                 )
                 Text(
                     text = text,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     lineHeight = 16.sp
                 )
             }

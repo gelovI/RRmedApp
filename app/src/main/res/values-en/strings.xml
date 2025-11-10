@@ -144,4 +144,22 @@
     This evaluation is based on European blood pressure reference values and does not represent a medical diagnosis.
     It is intended only as an orientation to help you better understand your measurements.
     </string>
+    <string name="error_reading_file">Datei konnte nicht gelesen werden.</string>
+    <string name="error_generic">Unerwarteter Fehler.</string>
+    <string name="error_import_failed">Import fehlgeschlagen.</string>
+    <string name="user_management">User management</string>
+    <string name="select_user_hint">Tap a user to switch profile.</string>
+    <string name="active_user">Active user</string>
+    <string name="switch_to_user">Switch to this user</string>
+    <string name="create_new_user_sub">Add a new profile for separate measurements.</string>
+    <string name="delete_active_user_sub">Remove the current user and all their measurements.</string>
+    <string name="data_and_export">Data &amp; export</string>
+    <string name="import_data_sub">Restore data from a backup file.</string>
+    <string name="export_data_sub">Save all data as a backup file.</string>
+    <string name="overview_export_pdf_sub">Create a PDF report of your measurements.</string>
+    <string name="pdf_range_hint">Select a start and end date for your PDF report.</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="select_end_date">Select end date</string>
+    <string name="pdf_range_summary">Report from %1$s to %2$s.</string>
+    <string name="invalid_date_range">End date must be after start date.</string>
 </resources>

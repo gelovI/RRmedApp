@@ -27,6 +27,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.example.bloodpressureapp.data.MIGRATION_3_4
+import com.example.bloodpressureapp.ui.components.PDFDateRangeDialog
+import com.example.bloodpressureapp.util.generateMeasurementPdf
 
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +46,6 @@ class MainActivity : ComponentActivity() {
         val dao = db.dao()
         val viewModel = AppViewModel(dao)
         val preferenceManager = PreferenceManager(applicationContext)
-
         setContent {
             val permissionLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission()
@@ -72,9 +73,12 @@ class MainActivity : ComponentActivity() {
 
             val users by viewModel.users.collectAsState()
             val selectedUser by viewModel.selectedUser.collectAsState()
+            val measurements by viewModel.measurements.collectAsState()
             val username = selectedUser?.name ?: "..."
 
             val lastUserId = preferenceManager.getLastSelectedUserId()
+
+            var showPdfDialog by remember { mutableStateOf(false) }
 
             LaunchedEffect(users) {
                 if (users.isNotEmpty() && selectedUser == null) {
@@ -100,7 +104,8 @@ class MainActivity : ComponentActivity() {
                     TopNavigationBar(
                         username = username,
                         viewModel = viewModel,
-                        preferenceManager = preferenceManager
+                        preferenceManager = preferenceManager,
+                        onShowPdfExportDialog = {showPdfDialog = true}
                     )
 
                     TopTabNavigation(
@@ -134,6 +139,44 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
+            }
+
+            if (showPdfDialog) {
+                PDFDateRangeDialog(
+                    context = this@MainActivity,
+                    onCancel = { showPdfDialog = false },
+                    onConfirm = { start, end ->
+                        showPdfDialog = false
+
+                        val u = selectedUser
+                        if (u == null) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                R.string.overview_no_user,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return@PDFDateRangeDialog
+                        }
+
+                        // Wichtig: KEINE falschen named arguments -> einfach positional.
+                        // Signature laut Fehlermeldung: (context, data, startDate, endDate, user)
+                        val pdfFile = generateMeasurementPdf(
+                            this@MainActivity,
+                            measurements,
+                            start,
+                            end,
+                            u
+                        )
+
+                        Toast.makeText(
+                            this@MainActivity,
+                            pdfFile?.let {
+                                "${getString(R.string.overview_pdf_saved)}: ${it.name}"
+                            } ?: getString(R.string.overview_no_data),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
             }
         }
     }

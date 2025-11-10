@@ -143,5 +143,22 @@
     Diese Auswertung basiert auf europäischen Referenzwerten für Blutdruckmessungen und stellt keine ärztliche Diagnose dar.
     Sie dient ausschließlich als Orientierung, um ein besseres Verständnis der eigenen Messwerte zu ermöglichen.
     </string>
-
+    <string name="error_reading_file">Die ausgewählte Datei konnte nicht gelesen werden.</string>
+    <string name="error_generic">Ein unerwarteter Fehler ist aufgetreten.</string>
+    <string name="error_import_failed">Der Import ist fehlgeschlagen.</string>
+    <string name="user_management">Benutzerverwaltung</string>
+    <string name="select_user_hint">Tippe auf einen Benutzer, um das Profil zu wechseln.</string>
+    <string name="active_user">Aktiver Benutzer</string>
+    <string name="switch_to_user">Zu diesem Benutzer wechseln</string>
+    <string name="create_new_user_sub">Neues Profil für getrennte Messungen anlegen.</string>
+    <string name="delete_active_user_sub">Aktiven Benutzer und alle seine Messungen löschen.</string>
+    <string name="data_and_export">Daten &amp; Export</string>
+    <string name="import_data_sub">Gesicherte Daten aus einer Datei wiederherstellen.</string>
+    <string name="export_data_sub">Alle Daten als Sicherungsdatei speichern.</string>
+    <string name="overview_export_pdf_sub">PDF-Bericht deiner Messungen erstellen.</string>
+    <string name="pdf_range_hint">Wähle einen Anfangs- und Endzeitraum für deinen PDF-Bericht.</string>
+    <string name="select_start_date">Startdatum wählen</string>
+    <string name="select_end_date">Enddatum wählen</string>
+    <string name="pdf_range_summary">Bericht von %1$s bis %2$s.</string>
+    <string name="invalid_date_range">Das Enddatum muss nach dem Startdatum liegen.</string>
 </resources>

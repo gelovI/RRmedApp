@@ -2,6 +2,8 @@ package com.example.bloodpressureapp.ui.components
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -20,26 +22,30 @@ fun QuickAnalysisDialog(
     pulse: Int,
     onDismiss: () -> Unit
 ) {
+    val scroll = rememberScrollState()
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
                 text = stringResource(R.string.quick_analyse),
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.h6,
+                fontSize = 14.sp
             )
         },
         text = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(scroll)
                     .padding(horizontal = 4.dp, vertical = 2.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // Werteabschnitt
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("• ${stringResource(R.string.analise_sys)} $systolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
-                    Text("• ${stringResource(R.string.analise_dias)} $diastolic ${stringResource(R.string.mmHg)}", fontSize = 14.sp)
-                    Text("• ${stringResource(R.string.analise_puls)} $pulse ${stringResource(R.string.bpm)}", fontSize = 14.sp)
+                    Text("• ${stringResource(R.string.analise_sys)} $systolic ${stringResource(R.string.mmHg)}", fontSize = 12.sp)
+                    Text("• ${stringResource(R.string.analise_dias)} $diastolic ${stringResource(R.string.mmHg)}", fontSize = 12.sp)
+                    Text("• ${stringResource(R.string.analise_puls)} $pulse ${stringResource(R.string.bpm)}", fontSize = 12.sp)
                 }
 
                 Divider()
@@ -48,12 +54,12 @@ fun QuickAnalysisDialog(
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = stringResource(R.string.rating),
-                        fontSize = 15.sp,
+                        fontSize = 14.sp,
                         style = MaterialTheme.typography.subtitle1
                     )
                     Text(
                         text = analyzeValues(context, systolic, diastolic, pulse),
-                        fontSize = 14.sp,
+                        fontSize = 12.sp,
                         lineHeight = 18.sp
                     )
                 }
@@ -62,7 +68,7 @@ fun QuickAnalysisDialog(
                 Spacer(Modifier.height(8.dp))
                 DisclaimerBox(
                     title = stringResource(R.string.analysis_disclaimer_title),
-                    text  = stringResource(R.string.analysis_disclaimer_text)
+                    text  = stringResource(R.string.analysis_disclaimer_text),
                 )
             }
         },

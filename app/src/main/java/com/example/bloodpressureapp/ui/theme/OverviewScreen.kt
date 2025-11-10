@@ -1,14 +1,10 @@
 package com.example.bloodpressureapp.ui.theme
 
-import com.example.bloodpressureapp.util.generateMeasurementPdf
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PictureAsPdf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import com.example.bloodpressureapp.ui.components.PDFDateRangeDialog
 import com.example.bloodpressureapp.data.Measurement
 import com.example.bloodpressureapp.ui.components.EditMeasurementDialog
 import androidx.compose.ui.res.stringResource
@@ -36,8 +31,6 @@ fun OverviewScreen(viewModel: AppViewModel) {
     var showEditDialog by remember { mutableStateOf<Measurement?>(null) }
     var showDeleteDialog by remember { mutableStateOf<Measurement?>(null) }
 
-    val user = viewModel.selectedUser.collectAsState().value
-
     val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
 
     val grouped = remember(measurements) {
@@ -45,10 +38,6 @@ fun OverviewScreen(viewModel: AppViewModel) {
             SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(it.timestamp))
         }
     }
-
-    var showDateDialog by remember { mutableStateOf(false) }
-    var startDate by remember { mutableStateOf<Date?>(null) }
-    var endDate by remember { mutableStateOf<Date?>(null) }
 
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
@@ -112,16 +101,6 @@ fun OverviewScreen(viewModel: AppViewModel) {
                 fontSize = fontSize,
                 modifier = Modifier.align(Alignment.Center)
             )
-
-            IconButton(
-                onClick = { showDateDialog = true },
-                modifier = Modifier.align(Alignment.CenterEnd)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PictureAsPdf,
-                    contentDescription = stringResource(R.string.overview_export_pdf)
-                )
-            }
         }
 
         Spacer(Modifier.height(8.dp))
@@ -251,32 +230,6 @@ fun OverviewScreen(viewModel: AppViewModel) {
                 }
             }
         }
-    }
-
-    if (showDateDialog) {
-        PDFDateRangeDialog(
-            context = context,
-            onCancel = { showDateDialog = false },
-            onConfirm = { start, end ->
-                startDate = start
-                endDate = end
-                showDateDialog = false
-
-                val u = user
-                if (u == null) {
-                    Toast.makeText(context, R.string.overview_no_user, Toast.LENGTH_LONG).show()
-                    return@PDFDateRangeDialog
-                }
-
-                val pdfFile = generateMeasurementPdf(context, measurements, start, end, u)
-                Toast.makeText(
-                    context,
-                    pdfFile?.let { "${context.getString(R.string.overview_pdf_saved)}: ${it.name}" }
-                        ?: context.getString(R.string.overview_no_data),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        )
     }
 
     showEditDialog?.let { measurement ->
