@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,6 +7,29 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use(::load)
+    }
+}
+
+fun signingProperty(name: String): String? =
+    localProperties.getProperty(name) ?: System.getenv(name)
+
+val releaseStoreFile = signingProperty("RRMED_RELEASE_STORE_FILE")
+val releaseStorePassword = signingProperty("RRMED_RELEASE_STORE_PASSWORD")
+val releaseKeyAlias = signingProperty("RRMED_RELEASE_KEY_ALIAS")
+val releaseKeyPassword = signingProperty("RRMED_RELEASE_KEY_PASSWORD")
+
+val hasReleaseSigning = listOf(
+    releaseStoreFile,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword
+).all { !it.isNullOrBlank() }
+
 
 android {
     namespace = "com.example.bloodpressureapp"
@@ -24,11 +49,13 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            storeFile = file("keystore/rrmed.keystore")
-            storePassword = "REMOVED_SECRET"
-            keyAlias = "rrmed_release"
-            keyPassword = "REMOVED_SECRET"
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(releaseStoreFile!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
         }
     }
 
@@ -38,7 +65,9 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            signingConfig = signingConfigs.getByName("release")
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
