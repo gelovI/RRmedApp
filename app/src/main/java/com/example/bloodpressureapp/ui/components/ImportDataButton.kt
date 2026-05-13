@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.bloodpressureapp.R
-import com.example.bloodpressureapp.util.importDataForSelectedUsers
 import com.example.bloodpressureapp.util.peekUsersInBackup
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +49,13 @@ fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
 
     // Zeige Dialog nur, wenn JSON vorhanden ist
     if (showUserDialog && jsonContent != null) {
-        val previews = remember(jsonContent) { peekUsersInBackup(jsonContent!!) }
+        val previews = remember(jsonContent) {
+            try {
+                peekUsersInBackup(jsonContent!!)
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
 
         if (previews.isNotEmpty()) {
             UserMultiSelectDialog(

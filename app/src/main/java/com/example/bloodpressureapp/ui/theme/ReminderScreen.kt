@@ -123,7 +123,6 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                             days = daysString
                         )
                         viewModel.updateReminder(updated)
-                        viewModel.scheduleReminderAlarm(context, updated)
                         editMode = null
                     } else {
                         viewModel.addReminder(
