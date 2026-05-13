@@ -1,53 +1,104 @@
 package com.example.bloodpressureapp.viewmodel
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bloodpressureapp.data.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import com.example.bloodpressureapp.data.AppRepository
+import com.example.bloodpressureapp.data.Measurement
 import com.example.bloodpressureapp.data.Reminder
-import com.example.bloodpressureapp.receiver.ReminderReceiver
-import java.util.Calendar
+import com.example.bloodpressureapp.data.Therapy
+import com.example.bloodpressureapp.data.User
+import com.example.bloodpressureapp.util.ReminderScheduler
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
-class AppViewModel(private val dao: AppDao) : ViewModel() {
+class AppViewModel(
+    private val repository: AppRepository,
+    private val reminderScheduler: ReminderScheduler
+) : ViewModel() {
 
-    val users = dao.getAllUsers().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-    private val _measurements = MutableStateFlow<List<Measurement>>(emptyList())
-    val measurements: StateFlow<List<Measurement>> = _measurements
+    val users: StateFlow<List<User>> = repository.users.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        emptyList()
+    )
 
     private val _selectedUser = MutableStateFlow<User?>(null)
-    val selectedUser: StateFlow<User?> = _selectedUser
+    val selectedUser: StateFlow<User?> = _selectedUser.asStateFlow()
 
-    private val _reminders = MutableStateFlow<List<Reminder>>(emptyList())
-    val reminders: StateFlow<List<Reminder>> = _reminders.asStateFlow()
+    private val selectedUserId = selectedUser
+        .map { it?.id }
+        .distinctUntilChanged()
+
+    val measurements: StateFlow<List<Measurement>> =
+        selectedUserId.flatMapLatest { userId ->
+            if (userId == null) {
+                flowOf(emptyList())
+            } else {
+                repository.measurementsForUser(userId)
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            emptyList()
+        )
+
+    val therapies: StateFlow<List<Therapy>> =
+        selectedUserId.flatMapLatest { userId ->
+            if (userId == null) {
+                flowOf(emptyList())
+            } else {
+                repository.therapiesForUser(userId)
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            emptyList()
+        )
+
+    val reminders: StateFlow<List<Reminder>> =
+        selectedUserId.flatMapLatest { userId ->
+            if (userId == null) {
+                flowOf(emptyList())
+            } else {
+                repository.remindersForUser(userId)
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            emptyList()
+        )
 
     fun selectUser(user: User) {
         _selectedUser.value = user
-        loadMeasurements(user.id)
     }
 
     fun saveUser(name: String) {
         viewModelScope.launch {
-            val newUser = User(name = name)
-            dao.insertUser(newUser)
-
-            dao.getAllUsers().collect { list ->
-                if (list.isNotEmpty()) {
-                    val lastUser = list.last()
-                    _selectedUser.value = lastUser
-                    loadMeasurements(lastUser.id)
-                    return@collect
-                }
-            }
+            val id = repository.insertUser(User(name = name)).toInt()
+            _selectedUser.value = User(id = id, name = name)
         }
     }
 
     suspend fun saveUserAndReturnId(name: String): Int {
-        return dao.insertUser(User(name = name)).toInt()
+        return repository.insertUser(User(name = name)).toInt()
+    }
+
+    fun deleteUser(user: User) {
+        viewModelScope.launch {
+            repository.deleteUser(user)
+            if (_selectedUser.value?.id == user.id) {
+                _selectedUser.value = null
+            }
+        }
     }
 
     fun saveMeasurement(
@@ -59,7 +110,7 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
         timestamp: Long = System.currentTimeMillis()
     ) {
         viewModelScope.launch {
-            dao.insertMeasurement(
+            repository.insertMeasurement(
                 Measurement(
                     userId = userId,
                     systolic = systolic,
@@ -69,29 +120,18 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
                     timestamp = timestamp
                 )
             )
-            loadMeasurements(userId)
-        }
-    }
-
-    private fun loadMeasurements(userId: Int) {
-        viewModelScope.launch {
-            dao.getMeasurementsForUser(userId).collect {
-                _measurements.value = it
-            }
         }
     }
 
     fun updateMeasurement(measurement: Measurement) {
         viewModelScope.launch {
-            dao.updateMeasurement(measurement)
-            loadMeasurements(measurement.userId)
+            repository.updateMeasurement(measurement)
         }
     }
 
     fun deleteMeasurement(measurement: Measurement) {
         viewModelScope.launch {
-            dao.deleteMeasurement(measurement)
-            loadMeasurements(measurement.userId)
+            repository.deleteMeasurement(measurement)
         }
     }
 
@@ -100,57 +140,27 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
         deleteMeasurement(item)
     }
 
-    fun deleteUser(user: User) {
-        viewModelScope.launch {
-            dao.deleteUser(user)
-            _selectedUser.value = null
-            _measurements.value = emptyList()
-        }
-    }
-
-    private val _therapies = MutableStateFlow<List<Therapy>>(emptyList())
-    val therapies: StateFlow<List<Therapy>> = _therapies
-
-    fun loadTherapies(userId: Int) {
-        viewModelScope.launch {
-            dao.getTherapiesForUser(userId).collect {
-                _therapies.value = it
-            }
-        }
-    }
-
     fun saveTherapy(userId: Int, name: String, dosage: String) {
         viewModelScope.launch {
-            dao.insertTherapy(Therapy(userId = userId, name = name, dosage = dosage))
-            loadTherapies(userId)
+            repository.insertTherapy(
+                Therapy(
+                    userId = userId,
+                    name = name,
+                    dosage = dosage
+                )
+            )
         }
     }
 
     fun updateTherapy(therapy: Therapy) {
         viewModelScope.launch {
-            dao.updateTherapy(therapy)
-            loadTherapies(therapy.userId)
+            repository.updateTherapy(therapy)
         }
     }
 
     fun deleteTherapy(therapy: Therapy) {
         viewModelScope.launch {
-            dao.deleteTherapy(therapy)
-            loadTherapies(therapy.userId)
-        }
-    }
-
-    suspend fun getAllUsersOnce(): List<User> = dao.getAllUsersOnce()
-    suspend fun getAllMeasurements(): List<Measurement> = dao.getAllMeasurements()
-    suspend fun getAllTherapies(): List<Therapy> = dao.getAllTherapies()
-    suspend fun getAllReminders(): List<Reminder> = dao.getAllReminders()
-
-
-    fun loadReminders(userId: Int) {
-        viewModelScope.launch {
-            dao.getRemindersForUser(userId).collect {
-                _reminders.value = it
-            }
+            repository.deleteTherapy(therapy)
         }
     }
 
@@ -173,86 +183,36 @@ class AppViewModel(private val dao: AppDao) : ViewModel() {
                 days = days
             )
 
-            // Reminder speichern und ID zurückbekommen
-            val id = dao.insertReminder(reminder)
-
-            // Reminder mit korrekter ID kopieren
+            val id = repository.insertReminder(reminder)
             val savedReminder = reminder.copy(id = id.toInt())
 
-            // Liste neu laden
-            loadReminders(userId)
-
-            // Alarm für Reminder setzen
-            scheduleReminderAlarm(context, savedReminder)
+            reminderScheduler.schedule(savedReminder)
         }
     }
 
     fun updateReminder(reminder: Reminder) {
         viewModelScope.launch {
-            dao.updateReminder(reminder)
-            loadReminders(reminder.userId)
+            repository.updateReminder(reminder)
+            reminderScheduler.schedule(reminder)
         }
-    }
-
-    private fun cancelReminderAlarm(context: Context, reminder: Reminder) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            reminder.id,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        alarmManager.cancel(pendingIntent)
     }
 
     fun deleteReminder(reminder: Reminder, context: Context) {
         viewModelScope.launch {
-            cancelReminderAlarm(context, reminder) // Alarm abbrechen
-            dao.deleteReminder(reminder)
-            loadReminders(reminder.userId)
+            reminderScheduler.cancel(reminder)
+            repository.deleteReminder(reminder)
         }
     }
 
     fun scheduleReminderAlarm(context: Context, reminder: Reminder) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                return
-            }
-        }
-        val intent = Intent(context, ReminderReceiver::class.java).apply {
-            putExtra("message", reminder.message)
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            reminder.id,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, reminder.hour)
-            set(Calendar.MINUTE, reminder.minute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        if (reminder.repeatDaily) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-            )
-        } else {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
-        }
+        reminderScheduler.schedule(reminder)
     }
+
+    suspend fun getAllUsersOnce(): List<User> = repository.getAllUsersOnce()
+    suspend fun getAllMeasurements(): List<Measurement> = repository.getAllMeasurements()
+    suspend fun getAllTherapies(): List<Therapy> = repository.getAllTherapies()
+    suspend fun getAllReminders(): List<Reminder> = repository.getAllReminders()
+
+    fun loadTherapies(userId: Int) = Unit
+    fun loadReminders(userId: Int) = Unit
 }

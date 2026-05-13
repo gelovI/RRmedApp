@@ -27,8 +27,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.example.bloodpressureapp.data.MIGRATION_3_4
+import com.example.bloodpressureapp.data.MIGRATION_4_5
 import com.example.bloodpressureapp.ui.components.PDFDateRangeDialog
-import com.example.bloodpressureapp.util.generateMeasurementPdf
+import com.example.bloodpressureapp.util.generateMeasurementPdfBytes
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.Date
+import com.example.bloodpressureapp.data.AppRepository
+import com.example.bloodpressureapp.util.ReminderScheduler
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -40,11 +48,13 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java,
             "bloodpressure-db"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
             .build()
 
         val dao = db.dao()
-        val viewModel = AppViewModel(dao)
+        val repository = AppRepository(dao)
+        val reminderScheduler = ReminderScheduler(applicationContext)
+        val viewModel = AppViewModel(repository, reminderScheduler)
         val preferenceManager = PreferenceManager(applicationContext)
         setContent {
             val permissionLauncher = rememberLauncherForActivityResult(
@@ -79,6 +89,44 @@ class MainActivity : ComponentActivity() {
             val lastUserId = preferenceManager.getLastSelectedUserId()
 
             var showPdfDialog by remember { mutableStateOf(false) }
+
+            var pendingPdfRange by remember { mutableStateOf<Pair<Date, Date>?>(null) }
+
+            val createPdfLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.CreateDocument("application/pdf")
+            ) { uri ->
+                val range = pendingPdfRange
+                val u = selectedUser
+
+                if (uri != null && range != null && u != null) {
+                    val bytes = generateMeasurementPdfBytes(
+                        measurements,
+                        range.first,
+                        range.second,
+                        u
+                    )
+
+                    if (bytes != null) {
+                        contentResolver.openOutputStream(uri)?.use { output ->
+                            output.write(bytes)
+                        }
+
+                        Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.overview_pdf_saved),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.overview_no_data),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+                pendingPdfRange = null
+            }
 
             LaunchedEffect(users) {
                 if (users.isNotEmpty() && selectedUser == null) {
@@ -160,21 +208,12 @@ class MainActivity : ComponentActivity() {
 
                         // Wichtig: KEINE falschen named arguments -> einfach positional.
                         // Signature laut Fehlermeldung: (context, data, startDate, endDate, user)
-                        val pdfFile = generateMeasurementPdf(
-                            this@MainActivity,
-                            measurements,
-                            start,
-                            end,
-                            u
-                        )
+                        pendingPdfRange = start to end
 
-                        Toast.makeText(
-                            this@MainActivity,
-                            pdfFile?.let {
-                                "${getString(R.string.overview_pdf_saved)}: ${it.name}"
-                            } ?: getString(R.string.overview_no_data),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        val fileDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                        val safeUserName = u.name.replace(Regex("[^A-Za-z0-9._-]"), "_")
+
+                        createPdfLauncher.launch("Blutdruck_${safeUserName}_$fileDate.pdf")
                     }
                 )
             }

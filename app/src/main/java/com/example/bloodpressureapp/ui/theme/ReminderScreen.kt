@@ -19,6 +19,7 @@ import com.example.bloodpressureapp.ui.components.ReminderCardContent
 import com.example.bloodpressureapp.ui.components.SwipeableCard
 import com.example.bloodpressureapp.viewmodel.AppViewModel
 import com.example.bloodpressureapp.ui.components.TimePickerDialogSpinner
+import java.util.Calendar
 import java.util.Locale
 
 @Composable
@@ -35,19 +36,21 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
     val showDeleteDialog = remember { mutableStateOf<Reminder?>(null) }
 
     val daysOfWeek = listOf(
-        stringResource(R.string.monday_short),
-        stringResource(R.string.tuesday_short),
-        stringResource(R.string.wednesday_short),
-        stringResource(R.string.thursday_short),
-        stringResource(R.string.friday_short),
-        stringResource(R.string.saturday_short),
-        stringResource(R.string.sunday_short)
+        Calendar.MONDAY to stringResource(R.string.monday_short),
+        Calendar.TUESDAY to stringResource(R.string.tuesday_short),
+        Calendar.WEDNESDAY to stringResource(R.string.wednesday_short),
+        Calendar.THURSDAY to stringResource(R.string.thursday_short),
+        Calendar.FRIDAY to stringResource(R.string.friday_short),
+        Calendar.SATURDAY to stringResource(R.string.saturday_short),
+        Calendar.SUNDAY to stringResource(R.string.sunday_short)
     )
+
     val selectedDays = remember {
-        mutableStateMapOf<String, Boolean>().apply {
-            daysOfWeek.forEach { this[it] = false }
+        mutableStateMapOf<Int, Boolean>().apply {
+            daysOfWeek.forEach { (day, _) -> this[day] = false }
         }
     }
+
 
     val revealedStates = remember { mutableStateMapOf<Int, Boolean>() }
 
@@ -89,10 +92,11 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                     .padding(bottom = 12.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                daysOfWeek.forEach { day ->
-                    val isSelected = selectedDays[day] == true
+                daysOfWeek.forEach { (dayValue, dayLabel) ->
+                    val isSelected = selectedDays[dayValue] == true
+
                     Button(
-                        onClick = { selectedDays[day] = !isSelected },
+                        onClick = { selectedDays[dayValue] = !isSelected },
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = if (isSelected) MaterialTheme.colors.primary else Color.LightGray
@@ -100,7 +104,7 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                         modifier = Modifier.size(36.dp),
                         contentPadding = PaddingValues(0.dp)
                     ) {
-                        Text(day, fontSize = 12.sp, color = Color.White)
+                        Text(dayLabel, fontSize = 12.sp, color = Color.White)
                     }
                 }
             }
@@ -161,8 +165,11 @@ fun ReminderScreen(viewModel: AppViewModel, userId: Int) {
                         minute = reminder.minute
                         message = reminder.message
                         repeatDaily = reminder.repeatDaily
-                        selectedDays.clear()
-                        reminder.days.split(",").forEach { day -> selectedDays[day] = true }
+                        selectedDays.keys.forEach { selectedDays[it] = false }
+                        reminder.days
+                            .split(",")
+                            .mapNotNull { it.toIntOrNull() }
+                            .forEach { day -> selectedDays[day] = true }
                         editMode = reminder
                     },
                     onDelete = {

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RRmed</string>
+    <string name="enter_name_prompt">Внесете го вашето име:</string>
+    <string name="name_label">Име</string>
+    <string name="save">Зачувај</string>
+    <string name="welcome_with_name">Добредојде %1$s</string>
+    <string name="menu">Мени</string>
+    <string name="select_user">Избери корисник</string>
+    <string name="delete_active_user">Избриши активен корисник</string>
+    <string name="cancel">Откажи</string>
+    <string name="delete_user_title">Избриши корисник</string>
+    <string name="confirm_user_delete">Дали навистина сакате да го избришете корисникот „%1$s“ и сите мерења?</string>
+    <string name="delete">Избриши</string>
+
+    <string name="current_therapies">Тековни терапии</string>
+    <string name="dosage">Дозирање</string>
+    <string name="edit">Уреди</string>
+    <string name="delete_therapy">Избриши</string>
+    <string name="new_therapy">Внеси нова терапија</string>
+    <string name="hide_therapy_input">Скриј внес</string>
+    <string name="medication_name">Име на лек</string>
+    <string name="dosage_changes">Дозирање</string>
+    <string name="save_changes">Зачувај</string>
+    <string name="apply_changes">Примени промени</string>
+
+    <string name="averages">Просеци</string>
+    <string name="systolic">Систолен</string>
+    <string name="diastolic">Дијастолен</string>
+    <string name="pulse">Пулс</string>
+    <string name="no_measurements_available">Нема достапни мерења</string>
+
+    <string name="chart_title">Историја на мерења: Систолен / Дијастолен / Пулс</string>
+    <string name="chart_percentage_title">Историја на мерења</string>
+    <string name="chart_percentage_category">Дневни категории во проценти</string>
+
+    <string name="overview_title">📋 Историја на мерења</string>
+    <string name="overview_export_pdf">📄 Извези PDF</string>
+    <string name="overview_systolic">Сис</string>
+    <string name="overview_diastolic">Диј</string>
+    <string name="overview_pulse">Пулс</string>
+    <string name="overview_arrhythmia">Арит.</string>
+    <string name="overview_yes">Да</string>
+    <string name="overview_no">Не</string>
+    <string name="overview_edit">Уреди</string>
+    <string name="overview_delete">Избриши</string>
+    <string name="overview_delete_title">Избриши мерење</string>
+    <string name="overview_delete_confirm">Дали навистина сакате да го избришете ова мерење?</string>
+    <string name="overview_cancel">Откажи</string>
+    <string name="overview_pdf_saved">PDF зачуван</string>
+    <string name="overview_no_data">Нема мерења во избраниот период!</string>
+
+    <string name="measurement_systolic">Систолен</string>
+    <string name="measurement_diastolic">Дијастолен</string>
+    <string name="measurement_pulse">Пулс</string>
+    <string name="measurement_arrhythmia">Аритмија</string>
+    <string name="measurement_save_button">Зачувај</string>
+    <string name="measurement_saved">Мерењето е зачувано ✅</string>
+
+    <string name="dialog_edit_title">Уреди мерење</string>
+    <string name="dialog_save">Зачувај</string>
+    <string name="dialog_cancel">Откажи</string>
+
+    <string name="no_user_selected">Нема избран корисник.</string>
+    <string name="user_input_hint">Внесете го вашето име:</string>
+    <string name="name_label_user">Име</string>
+    <string name="save_user">Зачувај</string>
+
+    <string name="arrhythmia">Аритмија</string>
+    <string name="edit_measurement">Уреди мерење</string>
+
+    <string name="add_reminder">Додај потсетник</string>
+    <string name="select_time">Избери време</string>
+    <string name="reminder_message">Текст на потсетник</string>
+    <string name="repeat_daily">Повторувај секој ден</string>
+    <string name="save_reminder">Зачувај</string>
+    <string name="your_reminders">Ваши потсетници</string>
+    <string name="repeats_daily">Дневно</string>
+    <string name="no_repeat">Без повторување</string>
+    <string name="time_picker_title">Избери време</string>
+    <string name="confirm">OK</string>
+    <string name="updateReminder">Ажурирај</string>
+
+    <string name="welcome_user">Добредојде %1$s</string>
+    <string name="user_options">Опции за корисник</string>
+    <string name="create_new_user">Создај нов корисник</string>
+    <string name="enter_user_name">Име на нов корисник</string>
+    <string name="delete_user">Избриши корисник</string>
+    <string name="delete_user_confirmation">Дали навистина сакате да го избришете корисникот „%1$s“ и сите поврзани податоци?</string>
+
+    <string name="confirm_delete_title">Избриши терапија</string>
+    <string name="confirm_delete_therapy">Дали навистина сакате да ја избришете терапијата „%1$s“?</string>
+
+    <string name="label_normal">Нормален</string>
+    <string name="label_elevated">Малку покачен</string>
+    <string name="label_high">Висок</string>
+
+    <string name="chart_categories">Категории на мерења</string>
+
+    <string name="return_btn">Назад</string>
+    <string name="forward_btn">Следно</string>
+
+    <string name="date">Датум</string>
+
+    <string name="import_opt">✅ Увозот е завршен</string>
+    <string name="file_import">📥 Увези податоци</string>
+    <string name="share_backup">Сподели резервна копија</string>
+    <string name="file_export">📤 Извези податоци</string>
+
+    <string name="info_btn">Инфо</string>
+
+    <string name="date_range">Избери период</string>
+    <string name="start_date">📅 Избери почетен датум</string>
+    <string name="end_date">📅 Избери краен датум</string>
+    <string name="from">🗓️ Од:</string>
+    <string name="to">🗓️ До:</string>
+    <string name="PDF_gen">Креирај PDF</string>
+
+    <string name="quick_analyse">📊 Брза анализа</string>
+    <string name="analise_sys">➤ Систолен</string>
+    <string name="analise_dias">➤ Дијастолен</string>
+    <string name="analise_puls">➤ Пулс</string>
+
+    <string name="mmHg">mmHg</string>
+    <string name="bpm">bpm</string>
+
+    <string name="rating">💡 Проценка:</string>
+
+    <string name="close">Затвори</string>
+
+    <string name="bp_optimal">Оптимален крвен притисок</string>
+    <string name="bp_normal">Нормален крвен притисок</string>
+    <string name="bp_high_normal">Високо-нормален крвен притисок</string>
+    <string name="bp_hypertension_1">Хипертензија степен 1</string>
+    <string name="bp_hypertension_2">Хипертензија степен 2</string>
+    <string name="bp_hypertension_severe">Тешка хипертензија</string>
+    <string name="bp_unspecified">Не може јасно да се класифицира</string>
+
+    <string name="pulse_low">⚠️ Пулсот е низок (брадикардија).</string>
+    <string name="pulse_normal">✅ Пулсот е во нормален опсег.</string>
+    <string name="pulse_high">⚠️ Пулсот е покачен (тахикардија).</string>
+
+    <string name="bp_distribution_chart">Преглед на категории на крвен притисок</string>
+
+    <string name="pdf_report_title">Извештај за крвен притисок за: %1$s</string>
+    <string name="pdf_date_range">Период: %1$s - %2$s</string>
+    <string name="pdf_header">Време | Сист./Дијаст. | Пулс | Аритмија</string>
+
+    <string name="monday_short">Пон</string>
+    <string name="tuesday_short">Вто</string>
+    <string name="wednesday_short">Сре</string>
+    <string name="thursday_short">Чет</string>
+    <string name="friday_short">Пет</string>
+    <string name="saturday_short">Саб</string>
+    <string name="sunday_short">Нед</string>
+
+    <string name="reminder_active_days">📅 Активно на: %1$s</string>
+
+    <string name="delete_reminder_title">Избриши потсетник</string>
+    <string name="delete_reminder_confirm">Дали навистина сакате да го избришете овој потсетник?</string>
+
+    <string name="reminder_time">Време: %1$s</string>
+
+    <string name="select_all">Избери сè</string>
+    <string name="delete_selected">Избриши избрани</string>
+
+    <string name="delete_selected_confirm_title">Избриши записи?</string>
+    <string name="delete_selected_confirm_msg">Дали сакате да избришете %1$d избрани мерења? Ова дејство не може да се врати.</string>
+
+    <string name="select_users_export">Избери корисници за извоз</string>
+    <string name="select_users_import">Избери корисници за увоз</string>
+
+    <string name="no_users_in_backup">Нема пронајдени корисници во резервната копија</string>
+
+    <string name="measurements">Мерења</string>
+
+    <string name="overview_no_user">Нема избран корисник.</string>
+
+    <string name="analysis_disclaimer_title">Важно известување</string>
+    <string name="analysis_disclaimer_text">
+        Оваа проценка се базира на европски референтни вредности за крвен притисок и не претставува медицинска дијагноза.
+        Таа служи само како ориентација за подобро разбирање на вашите мерења.
+    </string>
+
+    <string name="error_reading_file">Датотеката не може да се прочита.</string>
+    <string name="error_generic">Неочекувана грешка.</string>
+    <string name="error_import_failed">Увозот не успеа.</string>
+
+    <string name="user_management">Управување со корисници</string>
+    <string name="select_user_hint">Допрете корисник за промена на профил.</string>
+    <string name="active_user">Активен корисник</string>
+    <string name="switch_to_user">Префрли на овој корисник</string>
+
+    <string name="create_new_user_sub">Додај нов профил за одделни мерења.</string>
+    <string name="delete_active_user_sub">Избриши го активниот корисник и сите негови мерења.</string>
+
+    <string name="data_and_export">Податоци &amp; извоз</string>
+
+    <string name="import_data_sub">Врати податоци од резервна копија.</string>
+    <string name="export_data_sub">Зачувај ги сите податоци како резервна копија.</string>
+
+    <string name="overview_export_pdf_sub">Креирај PDF извештај од вашите мерења.</string>
+
+    <string name="pdf_range_hint">Изберете почетен и краен датум за PDF извештајот.</string>
+    <string name="select_start_date">Избери почетен датум</string>
+    <string name="select_end_date">Избери краен датум</string>
+    <string name="pdf_range_summary">Извештај од %1$s до %2$s.</string>
+    <string name="invalid_date_range">Крајниот датум мора да биде по почетниот.</string>
+
+</resources>

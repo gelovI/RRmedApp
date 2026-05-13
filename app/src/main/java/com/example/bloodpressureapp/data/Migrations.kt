@@ -44,3 +44,59 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE reminders_new (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                userId INTEGER NOT NULL,
+                hour INTEGER NOT NULL,
+                minute INTEGER NOT NULL,
+                message TEXT NOT NULL,
+                repeatDaily INTEGER NOT NULL,
+                days TEXT NOT NULL,
+                createdAt INTEGER NOT NULL,
+                FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            INSERT INTO reminders_new (
+                id,
+                userId,
+                hour,
+                minute,
+                message,
+                repeatDaily,
+                days,
+                createdAt
+            )
+            SELECT
+                id,
+                userId,
+                hour,
+                minute,
+                message,
+                repeatDaily,
+                days,
+                createdAt
+            FROM reminders
+            WHERE userId IN (SELECT id FROM users)
+            """.trimIndent()
+        )
+
+        db.execSQL("DROP TABLE reminders")
+
+        db.execSQL("ALTER TABLE reminders_new RENAME TO reminders")
+
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_reminders_userId ON reminders(userId)"
+        )
+    }
+}
+
+
+

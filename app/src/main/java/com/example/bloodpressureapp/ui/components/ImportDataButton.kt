@@ -16,6 +16,9 @@ import com.example.bloodpressureapp.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.example.bloodpressureapp.util.ImportResult
+import com.example.bloodpressureapp.util.importDataForSelectedUsersSafely
+
 
 @Composable
 fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
@@ -29,6 +32,14 @@ fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
     ) { uri ->
         if (uri != null) {
             val inputStream = context.contentResolver.openInputStream(uri)
+            val size = context.contentResolver
+                .openAssetFileDescriptor(uri, "r")
+                ?.use { it.length } ?: -1L
+
+            if (size > 2_000_000L) {
+                Toast.makeText(context, "Backup-Datei ist zu groß.", Toast.LENGTH_SHORT).show()
+                return@rememberLauncherForActivityResult
+            }
             val json = inputStream?.bufferedReader().use { it?.readText() }
             if (!json.isNullOrBlank()) {
                 jsonContent = json
@@ -51,19 +62,32 @@ fun ImportDataButton(viewModel: AppViewModel, onFinished: () -> Unit) {
                 onDismiss = { showUserDialog = false },
                 onConfirm = { selectedBackupUserIds ->
                     showUserDialog = false
+
                     CoroutineScope(Dispatchers.Main).launch {
-                        importDataForSelectedUsers(
-                            context,
-                            jsonContent!!,
-                            viewModel,
-                            selectedBackupUserIds
+                        val result = importDataForSelectedUsersSafely(
+                            context = context,
+                            jsonContent = jsonContent!!,
+                            viewModel = viewModel,
+                            sourceUserIds = selectedBackupUserIds
                         )
+
+                        val message = when (result) {
+                            is ImportResult.Success ->
+                                "Import erfolgreich: ${result.importedUsers} Nutzer"
+
+                            is ImportResult.Error ->
+                                result.message
+                        }
+
                         Toast.makeText(
                             context,
-                            context.getString(R.string.import_opt),
+                            message,
                             Toast.LENGTH_SHORT
                         ).show()
-                        onFinished()
+
+                        if (result is ImportResult.Success) {
+                            onFinished()
+                        }
                     }
                 }
             )

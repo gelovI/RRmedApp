@@ -11,6 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
+sealed class ImportResult {
+    data class Success(val importedUsers: Int) : ImportResult()
+    data class Error(val message: String) : ImportResult()
+}
+
 // -------------- JSON Konfiguration --------------
 private val jsonFmt = Json {
     ignoreUnknownKeys = true
@@ -144,6 +149,42 @@ suspend fun importDataForSelectedUsers(
     val clean = jsonContent.trimStart('\uFEFF')
     val backup = jsonFmt.decodeFromString<BackupData>(clean)
     importBackupSubset(context, viewModel, backup, sourceUserIds)
+}
+
+suspend fun importDataForSelectedUsersSafely(
+    context: Context,
+    jsonContent: String,
+    viewModel: AppViewModel,
+    sourceUserIds: Set<Int>,
+    maxBytes: Int = 2_000_000
+): ImportResult = withContext(Dispatchers.IO) {
+    if (jsonContent.toByteArray().size > maxBytes) {
+        return@withContext ImportResult.Error("Backup-Datei ist zu groß.")
+    }
+
+    val clean = jsonContent.trimStart('\uFEFF')
+
+    val backup = try {
+        jsonFmt.decodeFromString<BackupData>(clean)
+    } catch (e: Exception) {
+        return@withContext ImportResult.Error("Backup-Datei ist ungültig oder beschädigt.")
+    }
+
+    if (backup.users.isEmpty()) {
+        return@withContext ImportResult.Error("Backup enthält keine Nutzer.")
+    }
+
+    val selectedUsers = backup.users.filter { it.id in sourceUserIds }
+    if (selectedUsers.isEmpty()) {
+        return@withContext ImportResult.Error("Keine passenden Nutzer im Backup gefunden.")
+    }
+
+    return@withContext try {
+        importBackupSubset(context, viewModel, backup, sourceUserIds)
+        ImportResult.Success(selectedUsers.size)
+    } catch (e: Exception) {
+        ImportResult.Error("Import fehlgeschlagen.")
+    }
 }
 
 // -------------- INTERN: Subset-Import mit ID-Neuzuordnung --------------
